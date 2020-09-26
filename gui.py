@@ -1,5 +1,6 @@
 from tkinter import *
 import re
+import loginDatabase
 
 class LoginWindow(Frame):
     def __init__(self, master):
@@ -34,6 +35,7 @@ class LoginWindow(Frame):
             self.master.title('OneClick')
             self.master.geometry('1280x720')
             app = MainWindow(self.master)
+        # TODO: @Hollis when check_login is False, can you display an error message on the window?
         print(email)
         print(password)
         
@@ -74,6 +76,7 @@ class CreateAccount(Frame):
         pass_confirm = self.entry_pass_confirm.get()
         if check_email(email) and check_password(password) and check_confirm_pass(pass_confirm, password): 
             # Confirm account has been created in database
+            loginDatabase.addUser(email, password)
             self.master.destroy()
             self.master = Tk()
             self.master.title('Login')
@@ -162,7 +165,11 @@ def check_email(email):
     else: return True
     
 def check_login(email, password):
-    return True
+    # checks if the email and corresponding password are present in the database
+    if loginDatabase.checkCredentials(email,password) == True:
+        return True
+    else:
+        return False
 
 if __name__ == '__main__':       
     root = Tk()

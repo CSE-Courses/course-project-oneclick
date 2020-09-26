@@ -32,7 +32,7 @@ def create_table():
     # creates table with email and password as columns
     mydb = connectToDatabase()
     mycursor = mydb.cursor()
-    mycursor.execute("CREATE TABLE user (email VARCHAR(255), password VARCHAR(20))")
+    mycursor.execute("CREATE TABLE users (email VARCHAR(255), password VARCHAR(20))")
     print("table created")
     mydb.close()
 
@@ -61,24 +61,52 @@ def removeUser(email):
     mydb.close()
     print(mycursor.rowcount, "User(s) successfully deleted")
 
-def checkDuplicate(email):
+def checkCredentials(email,password):
     #check to see if this email is already in the database
     # returns 'True' if there is a duplicate
 
     mydb = connectToDatabase()
     mycursor = mydb.cursor()
-    mycursor.execute("SELECT email FROM users")
+    mycursor.execute("SELECT * FROM user")
 
     myresult = mycursor.fetchall()
 
     for x in myresult:
         y = x[0]            # get first element in table row
         if y == email:
-            print("Email address already exists!")
-            mydb.close()
-            return True
+            print("Correct email!")
+            if x[1] == password:
+                print("correct password")
+                mydb.close()
+                return True
+            else:
+                print("incorrect password")
+                mydb.close()
+                return False
+    print("email not found")
     mydb.close()
     return False
+
+'''def checkPassword(password):
+    # checks to see if the password entered matches
+    # the corresponding email in the database
+
+    mydb = connectToDatabase()
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT password FROM user")
+
+    myresult = mycursor.fetchall()
+
+    for x in myresult:
+        y = x[0]  # get the second element in the table row (which is the password)
+        print(x)
+        if y == password:
+            print("correct password")
+            mydb.close()
+            return True
+        mydb.close()
+        return False '''
+
 
 
 #def login(email, password):
@@ -108,6 +136,4 @@ def check_tables():
     mycursor = mydb.cursor()
     print(mycursor.execute("SHOW TABLES"))
 
-create_table()
-addUser("einsteine98@gmail.com","test123")
-check_tables()
+
