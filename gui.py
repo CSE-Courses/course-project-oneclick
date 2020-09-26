@@ -36,9 +36,11 @@ class LoginWindow(Frame):
             self.master.title('OneClick')
             self.master.geometry('1280x720')
             app = MainWindow(self.master)
-        # TODO: @Hollis when check_login is False, can you display an error message on the window?
-        print(email)
-        print(password)
+        else:
+            self.entry_email.delete(0, 'end')
+            self.entry_password.delete(0, 'end')
+            self.label_error = Label(self, text='*Incorrect login credentials*', fg='red')
+            self.label_error.grid(columnspan=2)
         
     def create_clicked(self):
         self.master.destroy()
