@@ -32,7 +32,9 @@ def create_table():
     # creates table with email and password as columns
     mydb = connectToDatabase()
     mycursor = mydb.cursor()
-    mycursor.execute("CREATE TABLE users (email VARCHAR(255), password VARCHAR(20))")
+    mycursor.execute("CREATE TABLE users (email VARCHAR(255), password VARCHAR(20),event_name VARCHAR(255),zoom_link "
+                     "VARCHAR(255),description VARCHAR(255),event_date DATE NOT NULL, start_time TIME NOT NULL, "
+                     "end_time TIME NOT NULL)")
     print("table created")
     mydb.close()
 
@@ -135,5 +137,6 @@ def check_tables():
     mydb = connectToDatabase()
     mycursor = mydb.cursor()
     print(mycursor.execute("SHOW TABLES"))
+
 
 
