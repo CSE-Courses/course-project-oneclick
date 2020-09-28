@@ -1,7 +1,7 @@
 from tkinter import *
 from tkcalendar import Calendar
 import re
-import loginDatabase
+from database import loginDatabase
 
 class LoginWindow(Frame):
     def __init__(self, master):
