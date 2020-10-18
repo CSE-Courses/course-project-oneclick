@@ -3,8 +3,8 @@ from tkcalendar import Calendar
 import re
 from database import loginDatabase
 from database import calendarDatabase
-import datetime
-import time
+from datetime import date
+from datetime import time
 
 class LoginWindow(Frame):
     def __init__(self, master):
@@ -127,9 +127,9 @@ class MainWindow(Frame):
 
         string = ':00'
         option_list = []
-        var = StringVar(self)
+        self.var = StringVar(self)
         option_list.append('12:00AM')
-        var.set(option_list[0])
+        self.var.set(option_list[0])
         for i in range(1,12):
             option_list.append(str(i) + string + 'AM')
         option_list.append('12:00PM')
@@ -139,9 +139,9 @@ class MainWindow(Frame):
         self.label_start.grid(row=5, column=0)
         self.label_end = Label(self, text='End Time')
         self.label_end.grid(row=5, column=1)
-        self.start_time = OptionMenu(self, var, *option_list)
+        self.start_time = OptionMenu(self, self.var, *option_list)
         self.start_time.config(width=10)
-        self.end_time = OptionMenu(self, var, *option_list)
+        self.end_time = OptionMenu(self, self.var, *option_list)
         self.end_time.config(width=10)
         self.start_time.grid(row=6, column=0)
         self.end_time.grid(row=6, column=1)
@@ -156,13 +156,34 @@ class MainWindow(Frame):
     def recurring(self):
         # Make a checkbar with every day of the week
         self.pack()
+
+    def give_time(self,time_str):
+        # converts the string to a datetime object
+
+        split_time = time_str.split(":")
+        split_time_2 = []
+        if(split_time[1][2] == "A" ):
+            time_str_2 = split_time[1].split("A")[0]
+            return time(int(split_time[0]),int(time_str_2))
+        else:
+            time_str_2 = split_time[1].split("P")[0]
+            return time(int(split_time[0]), int(time_str_2))
+
+    def give_date(self,date_str):
+       split_date = date_str.split("/")
+       return date(int("20"+split_date[2]),int(split_date[0]),int(split_date[1]))
         
     def submit_event(self):
 
         print("submit clicked")
-      #  print(self.entry_event.get() + " " + self.entry_link.get() + " " + self.entry_descr.get(),)
-        print(self.start_time.get(self))
-      # calendarDatabase.add_user_info(email,self.entry_event.get(),self.entry_link.get(),self.entry_descr.get(),)
+
+        print(type(self.calendar.get_date()))
+        print(self.calendar.get_date())
+        print(type(self.give_date(self.calendar.get_date())))
+        print(self.give_date(self.calendar.get_date()))
+
+
+        calendarDatabase.add_user_info(self.email,self.entry_event.get(),self.entry_link.get(),self.entry_descr.get(),self.give_date(self.calendar.get_date()),self.give_time(self.var.get()),self.give_time(self.var.get()))
         self.label_event.destroy()
         self.label_descr.destroy()
         self.label_link.destroy()

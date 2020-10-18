@@ -1,6 +1,6 @@
 from database import loginDatabase
-import datetime
-
+from datetime import date
+from datetime import time
 
 def create_user_table(user_email):
     # creates table with email and password as columns
@@ -29,7 +29,11 @@ def add_user_info(email,event_name,zoom_link,description,event_date,start_time,e
     print("connection done")
     mcursor = mysqldb.cursor()
     print("cursor obtained")
-    mcursor.execute(statement,(event_name,zoom_link,description,event_date.strftime("%Y-%m-%d"),start_time.strftime("%H:%M:%S"),end_time.strftime("%H:%M:%S")))
+    #print(date(2020,10,30).strftime("%Y %m %d"))
+    print("------------")
+    print(type(start_time))
+    print("------------")
+    mcursor.execute(statement,(event_name,zoom_link,description,event_date,start_time,end_time))
     print("execute done!")
     mysqldb.commit()
     print("user info added")
