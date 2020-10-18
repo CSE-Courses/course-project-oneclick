@@ -2,6 +2,9 @@ from tkinter import *
 from tkcalendar import Calendar
 import re
 from database import loginDatabase
+from database import calendarDatabase
+import datetime
+import time
 
 class LoginWindow(Frame):
     def __init__(self, master):
@@ -23,7 +26,7 @@ class LoginWindow(Frame):
         self.login_button = Button(self, text='Login', command=self.login_clicked)
         self.login_button.grid(columnspan=2)
         self.label_create_acct.grid(columnspan=2)
-        
+        loginDatabase.create_users_table()
         self.pack()
     
     def login_clicked(self):
@@ -35,7 +38,7 @@ class LoginWindow(Frame):
             self.master = Tk()
             self.master.title('OneClick')
             self.master.geometry('1280x720')
-            app = MainWindow(self.master)
+            app = MainWindow(self.master,email)
         else:
             self.entry_email.delete(0, 'end')
             self.entry_password.delete(0, 'end')
@@ -91,8 +94,9 @@ class CreateAccount(Frame):
             self.entry_pass_confirm.delete(0, 'end')
             
 class MainWindow(Frame):
-    def __init__(self, master):
+    def __init__(self, master,email):
         super().__init__(master)
+        self.email = email
         
         self.add_button = Button(self, text='Make Appointment', command=self.create_event)
         self.calendar = Calendar(self, font='Arial 14', cursor='dotbox', selectmode='day',
@@ -106,6 +110,8 @@ class MainWindow(Frame):
         self.label_event = Label(self, text='Event Name')
         self.label_descr = Label(self, text='Description')
         self.label_link = Label(self, text='Zoom Link')
+
+
         
         self.entry_event = Entry(self, width=64)
         self.entry_descr = Entry(self, width=64)
@@ -117,7 +123,8 @@ class MainWindow(Frame):
         self.entry_event.grid(row=2, column=1)
         self.entry_descr.grid(row=4,column=1, ipady=50)
         self.entry_link.grid(row=3, column=1)
-        
+
+
         string = ':00'
         option_list = []
         var = StringVar(self)
@@ -151,6 +158,11 @@ class MainWindow(Frame):
         self.pack()
         
     def submit_event(self):
+
+        print("submit clicked")
+      #  print(self.entry_event.get() + " " + self.entry_link.get() + " " + self.entry_descr.get(),)
+        print(self.start_time.get(self))
+      # calendarDatabase.add_user_info(email,self.entry_event.get(),self.entry_link.get(),self.entry_descr.get(),)
         self.label_event.destroy()
         self.label_descr.destroy()
         self.label_link.destroy()
@@ -164,6 +176,8 @@ class MainWindow(Frame):
         self.recur_check.destroy()
         self.submit_btn.destroy()
         self.add_button.grid(columnspan=2)
+        self.label_event.grid
+
         
 def check_password(password):
     regex = '\d.*?[A-Z].*?[a-z]'
