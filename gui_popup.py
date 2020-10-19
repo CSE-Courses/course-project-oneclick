@@ -32,6 +32,6 @@ def notification_start(event_name,time_till):
 
     notification.show()
 
-notification_start("zoom","5")
+#notification_start("zoom","5")
 #event_pop_up("zoom call","sta301","termite")
 
