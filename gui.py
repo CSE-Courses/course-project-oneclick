@@ -1,7 +1,5 @@
 from tkinter import *
-from tkcalendar import Calendar
 import re
-from database import loginDatabase
 
 class LoginWindow(Frame):
     def __init__(self, master):
@@ -36,11 +34,8 @@ class LoginWindow(Frame):
             self.master.title('OneClick')
             self.master.geometry('1280x720')
             app = MainWindow(self.master)
-        else:
-            self.entry_email.delete(0, 'end')
-            self.entry_password.delete(0, 'end')
-            self.label_error = Label(self, text='*Incorrect login credentials*', fg='red')
-            self.label_error.grid(columnspan=2)
+        print(email)
+        print(password)
         
     def create_clicked(self):
         self.master.destroy()
@@ -79,7 +74,6 @@ class CreateAccount(Frame):
         pass_confirm = self.entry_pass_confirm.get()
         if check_email(email) and check_password(password) and check_confirm_pass(pass_confirm, password): 
             # Confirm account has been created in database
-            loginDatabase.addUser(email, password)
             self.master.destroy()
             self.master = Tk()
             self.master.title('Login')
@@ -94,15 +88,11 @@ class MainWindow(Frame):
     def __init__(self, master):
         super().__init__(master)
         
-        self.add_button = Button(self, text='Make Appointment', command=self.create_event)
-        self.calendar = Calendar(self, font='Arial 14', cursor='dotbox', selectmode='day',
-                                 showothermonthdays=False, showweeknumbers=False, firstweekday='sunday')
-        self.calendar.grid(columnspan=2)
-        self.add_button.grid(columnspan=2)
+        self.add_button = Button(self, text='Add Event', command=self.create_event)
+        self.add_button.grid(columnspan=2)      
         self.pack()
         
     def create_event(self):
-        self.add_button.grid_forget()
         self.label_event = Label(self, text='Event Name')
         self.label_descr = Label(self, text='Description')
         self.label_link = Label(self, text='Zoom Link')
@@ -111,11 +101,11 @@ class MainWindow(Frame):
         self.entry_descr = Entry(self, width=64)
         self.entry_link = Entry(self, width=64)
         
-        self.label_event.grid(row=2, sticky=E)
-        self.label_descr.grid(row=4, sticky=E)
+        self.label_event.grid(row=1, sticky=E)
+        self.label_descr.grid(row=2, sticky=E)
         self.label_link.grid(row=3, sticky=E)
-        self.entry_event.grid(row=2, column=1)
-        self.entry_descr.grid(row=4,column=1, ipady=50)
+        self.entry_event.grid(row=1, column=1)
+        self.entry_descr.grid(row=2, column=1)
         self.entry_link.grid(row=3, column=1)
         
         string = ':00'
@@ -128,16 +118,14 @@ class MainWindow(Frame):
         option_list.append('12:00PM')
         for i in range(1,12):
             option_list.append(str(i) + string + 'PM')
-        self.label_start = Label(self, text='Start Time')
-        self.label_start.grid(row=5, column=0)
-        self.label_end = Label(self, text='End Time')
-        self.label_end.grid(row=5, column=1)
+        self.label_start = Label(self, text='Start Time').grid(row=4, column=0)
+        self.label_end = Label(self, text='End Time').grid(row=4, column=1)
         self.start_time = OptionMenu(self, var, *option_list)
         self.start_time.config(width=10)
         self.end_time = OptionMenu(self, var, *option_list)
         self.end_time.config(width=10)
-        self.start_time.grid(row=6, column=0)
-        self.end_time.grid(row=6, column=1)
+        self.start_time.grid(row=5, column=0)
+        self.end_time.grid(row=5, column=1)
         
         self.submit_btn = Button(self, text='Submit', command=self.submit_event)
         self.recur_check = Checkbutton(self, text='Recurring Meeting', command=self.recurring)
@@ -151,19 +139,7 @@ class MainWindow(Frame):
         self.pack()
         
     def submit_event(self):
-        self.label_event.destroy()
-        self.label_descr.destroy()
-        self.label_link.destroy()
-        self.entry_event.destroy()
-        self.entry_descr.destroy()
-        self.entry_link.destroy()
-        self.label_start.destroy()
-        self.label_end.destroy()
-        self.start_time.destroy()
-        self.end_time.destroy()
-        self.recur_check.destroy()
-        self.submit_btn.destroy()
-        self.add_button.grid(columnspan=2)
+        return
         
 def check_password(password):
     regex = '\d.*?[A-Z].*?[a-z]'
@@ -186,11 +162,7 @@ def check_email(email):
     else: return True
     
 def check_login(email, password):
-    # checks if the email and corresponding password are present in the database
-    if loginDatabase.checkCredentials(email,password) == True:
-        return True
-    else:
-        return False
+    return True
 
 if __name__ == '__main__':       
     root = Tk()
