@@ -65,7 +65,15 @@ def get_user_events(email):
 
     for row in rows:
         ret_dict[row[0]] = row[1:6]
+    mysqldb.close()
     return ret_dict
+
+def drop_user_table(email):
+
+    mysql = connectToDatabase()
+    cursor = mysql.cursor()
+    cursor.execute("DROP TABLE {}".format(change_email(email)))
+    mysql.close()
 
 #add_user_info("jzola_buffalo_edu","Comp Sci for Kids","zoom.com/compscikids","Comp sci session for high school students",date(2020,10,29),time(12,0),time(1,0))
 

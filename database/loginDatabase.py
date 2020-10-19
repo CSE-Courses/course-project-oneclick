@@ -83,6 +83,7 @@ def removeUser(email):
     mycursor.execute(string)
     mydb.commit()
     mydb.close()
+    usersDatabase.drop_user_table(email)
     print(mycursor.rowcount, "User(s) successfully deleted")
 
 def checkCredentials(email,password):
@@ -161,4 +162,6 @@ def check_tables():
     print(mycursor.execute("SHOW TABLES"))
 
 
+
+removeUser("einsteine@gmail.com")
 
