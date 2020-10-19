@@ -11,7 +11,7 @@ def run_on_click(popup,command):
     popup.destroy()
     os.system(command)
 def zoom_call_command(link, zoom_path):
-    return f"{zoom_path} --url="+link
+    return f"{zoom_path} --url={link}"
 
 def event_pop_up(event_title,desc,command):
     popup = tk.Tk()
