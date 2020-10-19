@@ -1,5 +1,6 @@
 from tkinter import *
 import re
+from tkcalendar import Calendar 
 
 class LoginWindow(Frame):
     def __init__(self, master):
@@ -87,71 +88,159 @@ class CreateAccount(Frame):
 class MainWindow(Frame):
     def __init__(self, master):
         super().__init__(master)
-        
-        self.add_button = Button(self, text='Add Event', command=self.create_event)
-        self.add_button.grid(columnspan=2)      
         self.pack()
         
+        self.frame = Frame(master, width=240, height=720, bg='red')
+        self.frame.pack(side=LEFT, fill=BOTH)
+        self.add_button = Button(self.frame, text='Make Appointment', command=self.create_event)
+        self.add_button.pack()
+        
+#    def create_event(self):
+#        self.label_event = Label(self, text='Event Name')
+#        self.label_descr = Label(self, text='Description')
+#        self.label_link = Label(self, text='Zoom Link')
+# #       self.label_path = Label(self, test='Zoom path')
+#
+#        self.entry_event = Entry(self, width=64)
+#        self.entry_descr = Entry(self, width=64)
+#        self.entry_link = Entry(self, width=64)
+# #       self.entry_path = Entry(self, width=64)
+#        
+#        self.label_event.grid(row=1, sticky=E)
+#        self.label_descr.grid(row=2, sticky=E)
+#        self.label_link.grid(row=3, sticky=E)
+# #       self.label_path.grid(row=6, sticky=E)
+#        
+#        self.entry_event.grid(row=1, column=1)
+#        self.entry_descr.grid(row=2, column=1)
+#        self.entry_link.grid(row=3, column=1)
+# #       self.entry_path.grid(row=6, column=1)
+#        
+#        string = ':00'
+#        option_list = []
+#        var = StringVar(self)
+#        option_list.append('12:00AM')
+#        var.set(option_list[0])
+#        for i in range(1,12):
+#            option_list.append(str(i) + string + 'AM')
+#        option_list.append('12:00PM')
+#        for i in range(1,12):
+#            option_list.append(str(i) + string + 'PM')
+#        self.label_start = Label(self, text='Start Time').grid(row=4, column=0)
+#        self.label_end = Label(self, text='End Time').grid(row=4, column=1)
+#        self.start_time = OptionMenu(self, var, *option_list)
+#        self.start_time.config(width=10)
+#        self.end_time = OptionMenu(self, var, *option_list)
+#        self.end_time.config(width=10)
+#        self.start_time.grid(row=5, column=0)
+#        self.end_time.grid(row=5, column=1)
+#         
+#        self.submit_btn = Button(self, text='Submit', command = summit )
+#        self.recur_check = Checkbutton(self, text='Recurring Meeting', command=self.recurring)
+#        self.recur_check.grid(columnspan=2)
+#        self.submit_btn.grid(columnspan=2)
+#        self.pack()
+#        
+#        self.frame = Frame(master, width=240, height=720, bg='red')
+#        self.frame.pack(side=LEFT, fill=BOTH)
+#        self.add_button = Button(self.frame, text='Make Appointment', command=self.create_event)
+#        self.add_button.pack()
+        
     def create_event(self):
-        self.label_event = Label(self, text='Event Name')
-        self.label_descr = Label(self, text='Description')
-        self.label_link = Label(self, text='Zoom Link')
- #       self.label_path = Label(self, test='Zoom path')
-
-        self.entry_event = Entry(self, width=64)
-        self.entry_descr = Entry(self, width=64)
-        self.entry_link = Entry(self, width=64)
- #       self.entry_path = Entry(self, width=64)
+        self.add_button.pack_forget()
+        self.calendar = Calendar(self.frame, font='Arial 14', cursor='dotbox', selectmode='day',
+                                 showothermonthdays=False, showweeknumbers=False, firstweekday='sunday')
+        self.label_event = Label(self.frame, text='Event Name')
+        self.label_descr = Label(self.frame, text='Description')
+        self.label_link = Label(self.frame, text='Zoom Link')
         
-        self.label_event.grid(row=1, sticky=E)
-        self.label_descr.grid(row=2, sticky=E)
-        self.label_link.grid(row=3, sticky=E)
- #       self.label_path.grid(row=6, sticky=E)
+        self.entry_event = Entry(self.frame, width=64)
+        self.entry_descr = Text(self.frame, width=48, height=5)
+        self.entry_link = Entry(self.frame, width=64)
         
-        self.entry_event.grid(row=1, column=1)
-        self.entry_descr.grid(row=2, column=1)
-        self.entry_link.grid(row=3, column=1)
- #       self.entry_path.grid(row=6, column=1)
+        self.calendar.pack()
+        self.label_event.pack(padx=20)
+        self.entry_event.pack(padx=20)
+        self.label_descr.pack(padx=20)
+        self.entry_descr.pack(padx=20)
+        self.label_link.pack(padx=20)
+        self.entry_link.pack(padx=20)
         
-        string = ':00'
-        option_list = []
-        var = StringVar(self)
-        option_list.append('12:00AM')
-        var.set(option_list[0])
-        for i in range(1,12):
-            option_list.append(str(i) + string + 'AM')
-        option_list.append('12:00PM')
-        for i in range(1,12):
-            option_list.append(str(i) + string + 'PM')
-        self.label_start = Label(self, text='Start Time').grid(row=4, column=0)
-        self.label_end = Label(self, text='End Time').grid(row=4, column=1)
-        self.start_time = OptionMenu(self, var, *option_list)
-        self.start_time.config(width=10)
-        self.end_time = OptionMenu(self, var, *option_list)
-        self.end_time.config(width=10)
-        self.start_time.grid(row=5, column=0)
-        self.end_time.grid(row=5, column=1)
+        self.start_label = Label(self.frame, text='Start Time: ')
+        self.start_label.pack(side=LEFT, padx=(20,0))
+        self.start_hourstr=StringVar(self.frame,'10')
+        self.start_hour = Spinbox(self.frame,from_=0,to=23,wrap=True,textvariable=self.start_hourstr,width=2,state="readonly")
+        self.start_minstr=StringVar(self.frame,'30')
+        self.start_minstr.trace("w",self.trace_var)
+        self.start_last_value = ""
+        self.start_min = Spinbox(self.frame,from_=0,to=59,wrap=True,textvariable=self.start_minstr,width=2,state="readonly")
+        self.start_hour.pack(side=LEFT)
+        self.start_min.pack(side=LEFT, padx = (0,20))
+        
+        self.end_label = Label(self.frame, text='End Time: ')
+        self.end_label.pack(side=LEFT)
+        self.end_hourstr=StringVar(self.frame,'10')
+        self.end_hour = Spinbox(self.frame,from_=0,to=23,wrap=True,textvariable=self.end_hourstr,width=2,state="readonly")
+        self.end_minstr=StringVar(self.frame,'30')
+        self.end_minstr.trace("w",self.trace_var)
+        self.end_last_value = ""
+        self.end_min = Spinbox(self.frame,from_=0,to=59,wrap=True,textvariable=self.end_minstr,width=2,state="readonly")
+        self.end_hour.pack(side=LEFT)
+        self.end_min.pack(side=LEFT)
         import eventscheduler
-        summit =lambda: eventscheduler.run_popup(
-               eventscheduler.to_time_string("10/19/20",var.get()),  
+        c = lambda: eventscheduler.run_popup(
+               eventscheduler.to_time_string("10/19/20",start_minstr.get()),  
                self.entry_event.get(),
                self.entry_descr.get(),
                self.entry_link.get(),
                "zoom"
                ) 
-        self.submit_btn = Button(self, text='Submit', command = summit )
-        self.recur_check = Checkbutton(self, text='Recurring Meeting', command=self.recurring)
-        self.recur_check.grid(columnspan=2)
-        self.submit_btn.grid(columnspan=2)
+        def run ():
+            c
+            self.submit_event()
+
+        self.submit_btn = Button(self.frame, text='Submit', command=run)
+        self.recur_check = Checkbutton(self.frame, text='Recurring Meeting', command=self.recurring)
+        self.recur_check.pack()
+        self.submit_btn.pack()
         
-        self.pack()
+    def trace_var(self,*args):
+        if self.start_last_value == "59" and self.start_minstr.get() == "0":
+            self.start_hourstr.set(int(self.hourstr.get())+1 if self.start_hourstr.get() !="23" else 0)
+        self.start_last_value = self.start_minstr.get()
     
     def recurring(self):
         # Make a checkbar with every day of the week
         self.pack()
         
     def submit_event(self):
-        return
+        import eventscheduler
+        
+        self.display_event()
+        self.calendar.destroy()
+        self.label_event.destroy()
+        self.label_descr.destroy()
+        self.label_link.destroy()
+        self.entry_event.destroy()
+        self.entry_descr.destroy()
+        self.entry_link.destroy()
+        self.recur_check.destroy()
+        self.submit_btn.destroy()
+        self.start_hour.destroy()
+        self.start_min.destroy()
+        self.end_hour.destroy()
+        self.end_min.destroy()
+        self.start_label.pack_forget()
+        self.end_label.pack_forget()
+        self.add_button.pack()
+        
+    def display_event(self):
+        self.r_frame = Frame(self, bg='lightblue').pack(side=RIGHT)
+        event = Label(self.r_frame, text='Event: \n' + self.entry_event.get()).pack()
+        desc = Label(self.r_frame, text='Description: \n' + self.entry_descr.get('1.0', 'end-1c')).pack()
+        link = Label(self.r_frame, text='Link: \n' + self.entry_link.get()).pack()
+        times = Label(self.r_frame, text='Start Time: ' + self.start_hourstr.get() + ':' + self.start_minstr.get() + ' End Time: ' + self.end_hourstr.get() + ':' + self.end_minstr.get()).pack()
+        
         
 def check_password(password):
     regex = '\d.*?[A-Z].*?[a-z]'
@@ -174,7 +263,12 @@ def check_email(email):
     else: return True
     
 def check_login(email, password):
-    return True
+
+    # checks if the email and corresponding password are present in the database
+    #if loginDatabase.checkCredentials(email,password) == True:
+        return True
+    #else:
+    #    return False
 
 if __name__ == '__main__':       
     root = Tk()
