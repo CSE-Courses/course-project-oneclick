@@ -121,26 +121,26 @@ class MainWindow(Frame):
         self.entry_link.pack(padx=20)
         
         self.start_label = Label(self.frame, text='Start Time: ')
-        self.start_label.pack(side=LEFT, padx=(20,0))
+        self.start_label.pack(padx=20)
         self.start_hourstr=StringVar(self.frame,'10')
         self.start_hour = Spinbox(self.frame,from_=0,to=23,wrap=True,textvariable=self.start_hourstr,width=2,state="readonly")
         self.start_minstr=StringVar(self.frame,'30')
         self.start_minstr.trace("w",self.trace_var)
         self.start_last_value = ""
         self.start_min = Spinbox(self.frame,from_=0,to=59,wrap=True,textvariable=self.start_minstr,width=2,state="readonly")
-        self.start_hour.pack(side=LEFT)
-        self.start_min.pack(side=LEFT, padx = (0,20))
+        self.start_hour.pack()
+        self.start_min.pack()
         
         self.end_label = Label(self.frame, text='End Time: ')
-        self.end_label.pack(side=LEFT)
+        self.end_label.pack(padx=20)
         self.end_hourstr=StringVar(self.frame,'10')
         self.end_hour = Spinbox(self.frame,from_=0,to=23,wrap=True,textvariable=self.end_hourstr,width=2,state="readonly")
         self.end_minstr=StringVar(self.frame,'30')
         self.end_minstr.trace("w",self.trace_var)
         self.end_last_value = ""
         self.end_min = Spinbox(self.frame,from_=0,to=59,wrap=True,textvariable=self.end_minstr,width=2,state="readonly")
-        self.end_hour.pack(side=LEFT)
-        self.end_min.pack(side=LEFT)
+        self.end_hour.pack()
+        self.end_min.pack()
         
         self.submit_btn = Button(self.frame, text='Submit', command=self.submit_event)
         self.recur_check = Checkbutton(self.frame, text='Recurring Meeting', command=self.recurring)
