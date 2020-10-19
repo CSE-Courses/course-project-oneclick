@@ -163,5 +163,5 @@ def check_tables():
 
 
 
-removeUser("einsteine@gmail.com")
+
 

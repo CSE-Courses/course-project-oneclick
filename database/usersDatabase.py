@@ -75,6 +75,11 @@ def drop_user_table(email):
     cursor.execute("DROP TABLE {}".format(change_email(email)))
     mysql.close()
 
+
+def update_user_table(email,event_name_bool,zoom_link_bool,decription_bool,date_bool,start_time_bool,end_time_bool,update):
+   pass
+
+
 #add_user_info("jzola_buffalo_edu","Comp Sci for Kids","zoom.com/compscikids","Comp sci session for high school students",date(2020,10,29),time(12,0),time(1,0))
 
 
