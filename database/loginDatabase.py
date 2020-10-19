@@ -1,4 +1,5 @@
 import mysql.connector
+from database import usersDatabase
 
 
 def createDatabase(password, name):
@@ -28,29 +29,50 @@ def connectToDatabase():
     )
     return mydb
 
-def create_table():
+def create_users_table():
     # creates table with email and password as columns
     mydb = connectToDatabase()
     mycursor = mydb.cursor()
-    mycursor.execute("CREATE TABLE users (email VARCHAR(255), password VARCHAR(20),event_name VARCHAR(255),zoom_link "
-                     "VARCHAR(255),description VARCHAR(255),event_date DATE NOT NULL, start_time TIME NOT NULL, "
-                     "end_time TIME NOT NULL)")
+    mycursor.execute("CREATE TABLE IF NOT EXISTS users (email VARCHAR(255), password VARCHAR(20))")
     print("table created")
     mydb.close()
+
+
+def user_exists(email):
+
+    mydb = connectToDatabase()
+    mycursor = mydb.cursor()
+    sql = "SELECT * from users"
+    mycursor.execute(sql)
+
+    rows = mycursor.fetchall()
+
+    for row in rows:
+        if row[0] == email:
+            return True
+        else:
+            continue
+    return False
 
 
 def addUser(email, password):
     #adds a new user to the database
 
-    mydb = connectToDatabase()
-    mycursor = mydb.cursor()
-    sql = "INSERT INTO user (email, password) VALUES (%s, %s)"
-    val = (email, password)
-    mycursor.execute(sql, val)
+    if user_exists(email):
+        return
+    else:
 
-    mydb.commit()
-    mydb.close()
-    print(mycursor.rowcount, "Record Inserted")
+        mydb = connectToDatabase()
+        mycursor = mydb.cursor()
+        sql = "INSERT INTO users (email, password) VALUES (%s, %s)"
+        val = (email, password)
+        mycursor.execute(sql, val)
+
+        mydb.commit()
+        mydb.close()
+        print(mycursor.rowcount, "Record Inserted")
+        usersDatabase.create_user_table(email)
+
 
 def removeUser(email):
 
@@ -61,6 +83,7 @@ def removeUser(email):
     mycursor.execute(string)
     mydb.commit()
     mydb.close()
+    usersDatabase.drop_user_table(email)
     print(mycursor.rowcount, "User(s) successfully deleted")
 
 def checkCredentials(email,password):
@@ -69,7 +92,7 @@ def checkCredentials(email,password):
 
     mydb = connectToDatabase()
     mycursor = mydb.cursor()
-    mycursor.execute("SELECT * FROM user")
+    mycursor.execute("SELECT * FROM users")
 
     myresult = mycursor.fetchall()
 
@@ -82,7 +105,7 @@ def checkCredentials(email,password):
                 mydb.close()
                 return True
             else:
-                print("incorrect password")
+                print(x[1] + ", " + password)
                 mydb.close()
                 return False
     print("email not found")
@@ -137,6 +160,8 @@ def check_tables():
     mydb = connectToDatabase()
     mycursor = mydb.cursor()
     print(mycursor.execute("SHOW TABLES"))
+
+
 
 
 

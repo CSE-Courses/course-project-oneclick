@@ -2,6 +2,9 @@ from tkinter import *
 from tkcalendar import Calendar
 import re
 from database import loginDatabase
+from database import usersDatabase
+from datetime import date
+from datetime import time
 
 class LoginWindow(Frame):
     def __init__(self, master):
@@ -23,7 +26,7 @@ class LoginWindow(Frame):
         self.login_button = Button(self, text='Login', command=self.login_clicked)
         self.login_button.grid(columnspan=2)
         self.label_create_acct.grid(columnspan=2)
-        
+        loginDatabase.create_users_table()
         self.pack()
     
     def login_clicked(self):
@@ -35,7 +38,7 @@ class LoginWindow(Frame):
             self.master = Tk()
             self.master.title('OneClick')
             self.master.geometry('1280x720')
-            app = MainWindow(self.master)
+            app = MainWindow(self.master,email)
         else:
             self.entry_email.delete(0, 'end')
             self.entry_password.delete(0, 'end')
@@ -91,14 +94,71 @@ class CreateAccount(Frame):
             self.entry_pass_confirm.delete(0, 'end')
             
 class MainWindow(Frame):
-    def __init__(self, master):
+    def __init__(self, master,email):
         super().__init__(master)
+
         self.pack()
         
         self.frame = Frame(master, width=240, height=720, bg='red')
         self.frame.pack(side=LEFT, fill=BOTH)
         self.add_button = Button(self.frame, text='Make Appointment', command=self.create_event)
         self.add_button.pack()
+
+        self.email = email
+        
+        self.add_button = Button(self, text='Make Appointment', command=self.create_event)
+        self.calendar = Calendar(self, font='Arial 14', cursor='dotbox', selectmode='day',
+                                 showothermonthdays=False, showweeknumbers=False, firstweekday='sunday')
+        self.calendar.grid(columnspan=2)
+        self.add_button.grid(columnspan=2)
+        self.pack()
+        
+    def create_event(self):
+        self.add_button.grid_forget()
+        self.label_event = Label(self, text='Event Name')
+        self.label_descr = Label(self, text='Description')
+        self.label_link = Label(self, text='Zoom Link')
+
+
+        
+        self.entry_event = Entry(self, width=64)
+        self.entry_descr = Entry(self, width=64)
+        self.entry_link = Entry(self, width=64)
+        
+        self.label_event.grid(row=2, sticky=E)
+        self.label_descr.grid(row=4, sticky=E)
+        self.label_link.grid(row=3, sticky=E)
+        self.entry_event.grid(row=2, column=1)
+        self.entry_descr.grid(row=4,column=1, ipady=50)
+        self.entry_link.grid(row=3, column=1)
+
+
+        string = ':00'
+        option_list = []
+        self.var = StringVar(self)
+        option_list.append('12:00AM')
+        self.var.set(option_list[0])
+        for i in range(1,12):
+            option_list.append(str(i) + string + 'AM')
+        option_list.append('12:00PM')
+        for i in range(1,12):
+            option_list.append(str(i) + string + 'PM')
+        self.label_start = Label(self, text='Start Time')
+        self.label_start.grid(row=5, column=0)
+        self.label_end = Label(self, text='End Time')
+        self.label_end.grid(row=5, column=1)
+        self.start_time = OptionMenu(self, self.var, *option_list)
+        self.start_time.config(width=10)
+        self.end_time = OptionMenu(self, self.var, *option_list)
+        self.end_time.config(width=10)
+        self.start_time.grid(row=6, column=0)
+        self.end_time.grid(row=6, column=1)
+        
+        self.submit_btn = Button(self, text='Submit', command=self.submit_event)
+        self.recur_check = Checkbutton(self, text='Recurring Meeting', command=self.recurring)
+        self.recur_check.grid(columnspan=2)
+        self.submit_btn.grid(columnspan=2)
+
         
     def create_event(self):
         self.add_button.pack_forget()
@@ -155,10 +215,37 @@ class MainWindow(Frame):
     def recurring(self):
         # Make a checkbar with every day of the week
         self.pack()
+
+    def give_time(self,time_str):
+        # converts the string to a datetime object
+
+        split_time = time_str.split(":")
+        split_time_2 = []
+        if(split_time[1][2] == "A" ):
+            time_str_2 = split_time[1].split("A")[0]
+            return time(int(split_time[0]),int(time_str_2))
+        else:
+            time_str_2 = split_time[1].split("P")[0]
+            return time(int(split_time[0]), int(time_str_2))
+
+    def give_date(self,date_str):
+       split_date = date_str.split("/")
+       return date(int("20"+split_date[2]),int(split_date[0]),int(split_date[1]))
         
     def submit_event(self):
+
+
+
+        print("submit clicked")
+
+        print(type(self.calendar.get_date()))
+        print(self.calendar.get_date())
+        print(type(self.give_date(self.calendar.get_date())))
+        print(self.give_date(self.calendar.get_date()))
+        usersDatabase.add_user_info(self.email, self.entry_event.get(), self.entry_link.get(), self.entry_descr.get(), self.give_date(self.calendar.get_date()), self.give_time(self.var.get()), self.give_time(self.var.get()))
         self.display_event()
         self.calendar.destroy()
+
         self.label_event.destroy()
         self.label_descr.destroy()
         self.label_link.destroy()
@@ -181,7 +268,10 @@ class MainWindow(Frame):
         desc = Label(self.r_frame, text='Description: \n' + self.entry_descr.get('1.0', 'end-1c')).pack()
         link = Label(self.r_frame, text='Link: \n' + self.entry_link.get()).pack()
         times = Label(self.r_frame, text='Start Time: ' + self.start_hourstr.get() + ':' + self.start_minstr.get() + ' End Time: ' + self.end_hourstr.get() + ':' + self.end_minstr.get()).pack()
-        
+        self.add_button.grid(columnspan=2)
+        self.label_event.grid
+
+
         
 def check_password(password):
     regex = '\d.*?[A-Z].*?[a-z]'
