@@ -96,17 +96,22 @@ class MainWindow(Frame):
         self.label_event = Label(self, text='Event Name')
         self.label_descr = Label(self, text='Description')
         self.label_link = Label(self, text='Zoom Link')
-        
+        self.label_path = Label(self, test='Zoom path')
+
         self.entry_event = Entry(self, width=64)
         self.entry_descr = Entry(self, width=64)
         self.entry_link = Entry(self, width=64)
+        self.entry_path = Entry(self, width=64)
         
         self.label_event.grid(row=1, sticky=E)
         self.label_descr.grid(row=2, sticky=E)
         self.label_link.grid(row=3, sticky=E)
+        self.label_path.grid(row=6, sticky=E)
+        
         self.entry_event.grid(row=1, column=1)
         self.entry_descr.grid(row=2, column=1)
         self.entry_link.grid(row=3, column=1)
+        self.entry_path.grid(row=6, column=1)
         
         string = ':00'
         option_list = []
@@ -126,8 +131,15 @@ class MainWindow(Frame):
         self.end_time.config(width=10)
         self.start_time.grid(row=5, column=0)
         self.end_time.grid(row=5, column=1)
-        
-        self.submit_btn = Button(self, text='Submit', command=self.submit_event)
+        import eventscheduler
+        summit =lambda: eventscheduler.run_popup(
+               eventscheduler.to_time_string("10/19/20",var.get()),  
+               self.entry_event.get(),
+               self.entry_descr.get(),
+               self.entry_link.get(),
+               "zoom"
+               ) 
+        self.submit_btn = Button(self, text='Submit', command = summit )
         self.recur_check = Checkbutton(self, text='Recurring Meeting', command=self.recurring)
         self.recur_check.grid(columnspan=2)
         self.submit_btn.grid(columnspan=2)
