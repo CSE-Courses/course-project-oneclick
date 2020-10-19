@@ -2,32 +2,25 @@ import time
 import datetime
 import threading
 import os
-
-    # The notifier function
-def notify(title, subtitle, message):
-    t = '-title {!r}'.format(title)
-    s = '-subtitle {!r}'.format(subtitle)
-    m = '-message {!r}'.format(message)
-    os.system('terminal-notifier {}'.format(' '.join([m, t, s])))
-
-def timer():
-    # Calling the function
-    notify(title = 'One Click',
-              subtitle = 'event started',
-              message  = 'Your event is ready!')
-    print("I'm working...")
+import gui_popup 
 
 
-inDate = input("Enter Event Date (day/month/year): ")
-inTime = input("Enter Event Time (hour/minute): ")
 
-finalDate = inDate + "/" + inTime
-#finalDate = "13/10/2020/00/43"
 
-timestamp = time.mktime(datetime.datetime.strptime(finalDate, "%d/%m/%Y/%H/%M").timetuple())
 
-difference = int(timestamp - time.time())
+#inDate = "18/10/2020" 
+#inTime = "22/28" 
+#DATE str DAY/MONTH/YEAR
+#TIME str MILITARY H/M
+def run_popup(inDate,inTime,title,desc,link,zoom_position):
+    finalDate = inDate + "/" + inTime
+    timestamp = time.mktime(datetime.datetime.strptime(finalDate, "%d/%m/%Y/%H/%M").timetuple())
+    difference = int(timestamp - time.time())
+    def timer():
+        zoom_command=gui_popup.zoom_call_command(link,zoom_position)
+        gui_popup.event_pop_up(title,desc,zoom_command)    
 
-my_timer = threading.Timer(difference, timer)
-my_timer.start()
-print("Waiting...")
+    print(timestamp - time.time())
+    my_timer = threading.Timer(difference, timer)
+    my_timer.start()
+    print("Waiting...")
