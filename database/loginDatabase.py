@@ -1,5 +1,5 @@
 import mysql.connector
-from database import calendarDatabase
+from database import usersDatabase
 
 
 def createDatabase(password, name):
@@ -38,19 +38,40 @@ def create_users_table():
     mydb.close()
 
 
-def addUser(email, password):
-    #adds a new user to the database
+def user_exists(email):
 
     mydb = connectToDatabase()
     mycursor = mydb.cursor()
-    sql = "INSERT INTO users (email, password) VALUES (%s, %s)"
-    val = (email, password)
-    mycursor.execute(sql, val)
+    sql = "SELECT * from users"
+    mycursor.execute(sql)
 
-    mydb.commit()
-    mydb.close()
-    print(mycursor.rowcount, "Record Inserted")
-    calendarDatabase.create_user_table(email)
+    rows = mycursor.fetchall()
+
+    for row in rows:
+        if row[0] == email:
+            return True
+        else:
+            continue
+    return False
+
+
+def addUser(email, password):
+    #adds a new user to the database
+
+    if user_exists(email):
+        return
+    else:
+
+        mydb = connectToDatabase()
+        mycursor = mydb.cursor()
+        sql = "INSERT INTO users (email, password) VALUES (%s, %s)"
+        val = (email, password)
+        mycursor.execute(sql, val)
+
+        mydb.commit()
+        mydb.close()
+        print(mycursor.rowcount, "Record Inserted")
+        usersDatabase.create_user_table(email)
 
 
 def removeUser(email):
@@ -83,7 +104,7 @@ def checkCredentials(email,password):
                 mydb.close()
                 return True
             else:
-                print("incorrect password")
+                print(x[1] + ", " + password)
                 mydb.close()
                 return False
     print("email not found")

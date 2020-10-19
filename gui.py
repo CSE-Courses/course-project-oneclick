@@ -2,7 +2,7 @@ from tkinter import *
 from tkcalendar import Calendar
 import re
 from database import loginDatabase
-from database import calendarDatabase
+from database import usersDatabase
 from datetime import date
 from datetime import time
 
@@ -183,7 +183,7 @@ class MainWindow(Frame):
         print(self.give_date(self.calendar.get_date()))
 
 
-        calendarDatabase.add_user_info(self.email,self.entry_event.get(),self.entry_link.get(),self.entry_descr.get(),self.give_date(self.calendar.get_date()),self.give_time(self.var.get()),self.give_time(self.var.get()))
+        usersDatabase.add_user_info(self.email, self.entry_event.get(), self.entry_link.get(), self.entry_descr.get(), self.give_date(self.calendar.get_date()), self.give_time(self.var.get()), self.give_time(self.var.get()))
         self.label_event.destroy()
         self.label_descr.destroy()
         self.label_link.destroy()
