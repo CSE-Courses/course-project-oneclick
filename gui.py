@@ -189,9 +189,9 @@ class MainWindow(Frame):
         self.end_min.pack(side=LEFT)
         import eventscheduler
         c = lambda: eventscheduler.run_popup(
-               eventscheduler.to_time_string("10/19/20",start_minstr.get()),  
+               eventscheduler.to_time_string(f"{calendar.month}/{calendar.day}/{calendar.year}",hourstr.get()),  
                self.entry_event.get(),
-               self.entry_descr.get(),
+               self.entry_descr.get("1.0","end-1c"),
                self.entry_link.get(),
                "zoom"
                ) 

@@ -83,4 +83,4 @@ def run_popup(finalDate,title,desc,link,zoom_position):
     my_timer = threading.Timer(difference, timer)
     my_timer.start()
     print("Waiting...")
-
+run_popup("10/19/20/9/43","class","desc","link","zoom")
