@@ -1,7 +1,7 @@
 from tkinter import *
 import re
 from tkcalendar import Calendar 
-
+import eventscheduler
 class LoginWindow(Frame):
     def __init__(self, master):
         super().__init__(master)
@@ -187,19 +187,18 @@ class MainWindow(Frame):
         self.end_min = Spinbox(self.frame,from_=0,to=59,wrap=True,textvariable=self.end_minstr,width=2,state="readonly")
         self.end_hour.pack(side=LEFT)
         self.end_min.pack(side=LEFT)
-        import eventscheduler
-        c = lambda: eventscheduler.run_popup(
-               eventscheduler.to_time_string(f"{calendar.month}/{calendar.day}/{calendar.year}",hourstr.get()),  
+        # run_popup(finalDate,title,desc,link,zoom_position)
+        def run():
+            eventscheduler.run_popup(
+               eventscheduler.to_time_string(self.calendar.get_date(),self.start_hourstr.get()),  
                self.entry_event.get(),
                self.entry_descr.get("1.0","end-1c"),
                self.entry_link.get(),
                "zoom"
-               ) 
-        def run ():
-            c
+            )
             self.submit_event()
 
-        self.submit_btn = Button(self.frame, text='Submit', command=run)
+        self.submit_btn = Button(self.frame, text='Submit', command=lambda:run())
         self.recur_check = Checkbutton(self.frame, text='Recurring Meeting', command=self.recurring)
         self.recur_check.pack()
         self.submit_btn.pack()

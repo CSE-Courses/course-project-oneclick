@@ -30,7 +30,6 @@ def event_pop_up(event_title,desc,command):
 def notification_start(event_name,time_till):
     Notify.init(event_name)
     notification = Notify.Notification(summary=f"{event_name}|in {time_till} minutes")
-
     notification.show()
 
 #notification_start("zoom","5")
