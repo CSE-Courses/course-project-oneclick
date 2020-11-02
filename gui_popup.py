@@ -13,8 +13,15 @@ def run_on_click(popup,command):
     os.system(command)
 def zoom_call_command(link, zoom_path):
     return webbrowser.open(link)
+run = True
+def toggle_run(popup): 
+    popup.destroy()
+    global run
+    run = False 
 
 def event_pop_up(event_title,desc,command):
+    
+    if not run:return
     popup = tk.Tk()
     popup.wm_title("!")
     label = ttk.Label(popup, text=event_title,anchor=CENTER, font=TITLE_FONT)
@@ -23,8 +30,12 @@ def event_pop_up(event_title,desc,command):
     label = ttk.Label(popup, text=desc,anchor=CENTER, font=BODY_FONT)
     label.pack(side="top", fill="x", pady=10)
 
-    B1 = ttk.Button(popup, text="Okay", command =lambda : run_on_click(popup,command) )
+    B1 = ttk.Button(popup, text="Open", command =lambda : run_on_click(popup,command) )
+    
+    B2 = ttk.Button(popup, text="Do Not Disturb", command =lambda : toggle_run(popup)  )
     B1.pack()
+    B2.pack()
+    
     popup.mainloop()
 
 def notification_start(event_name,time_till):
