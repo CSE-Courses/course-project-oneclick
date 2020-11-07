@@ -1,6 +1,8 @@
 from tkinter import *
 import re
-from tkcalendar import Calendar 
+from tkcalendar import Calendar
+from database import loginDatabase
+from database import usersDatabase
 import eventscheduler
 class LoginWindow(Frame):
     def __init__(self, master):
@@ -34,7 +36,7 @@ class LoginWindow(Frame):
             self.master = Tk()
             self.master.title('OneClick')
             self.master.geometry('1280x720')
-            app = MainWindow(self.master)
+            app = MainWindow(self.master, email)
         print(email)
         print(password)
         
@@ -75,6 +77,7 @@ class CreateAccount(Frame):
         pass_confirm = self.entry_pass_confirm.get()
         if check_email(email) and check_password(password) and check_confirm_pass(pass_confirm, password): 
             # Confirm account has been created in database
+            loginDatabase.addUser(email, password)
             self.master.destroy()
             self.master = Tk()
             self.master.title('Login')
@@ -86,8 +89,9 @@ class CreateAccount(Frame):
             self.entry_pass_confirm.delete(0, 'end')
             
 class MainWindow(Frame):
-    def __init__(self, master):
+    def __init__(self, master, email):
         super().__init__(master)
+        self.email = email
         self.pack()
         
         self.frame = Frame(master, width=240, height=720, bg='red')
@@ -189,13 +193,13 @@ class MainWindow(Frame):
         self.end_min.pack(side=LEFT)
         # run_popup(finalDate,title,desc,link,zoom_position)
         def run():
-            eventscheduler.run_popup(
-               eventscheduler.to_time_string(self.calendar.get_date(),self.start_hourstr.get()),  
-               self.entry_event.get(),
-               self.entry_descr.get("1.0","end-1c"),
-               self.entry_link.get(),
-               "zoom"
-            )
+           # eventscheduler.run_popup(
+            #   eventscheduler.to_time_string(self.calendar.get_date(),self.start_hourstr.get()),
+             #  None,
+              # self.entry_descr.get("1.0","end-1c"),
+               #self.entry_link.get(),
+               #"zoom"
+            #)
             self.submit_event()
 
         self.submit_btn = Button(self.frame, text='Submit', command=lambda:run())
@@ -214,7 +218,10 @@ class MainWindow(Frame):
         
     def submit_event(self):
         import eventscheduler
-        
+
+     #   usersDatabase.add_user_info(self.email, self.entry_event.get(), self.entry_link.get(), self.entry_descr.get(),
+      #                              self.start_hourstr.get(), self.give_time(self.var.get()),
+       #                             self.give_time(self.var.get()))
         self.display_event()
         self.calendar.destroy()
         self.label_event.destroy()
@@ -264,10 +271,10 @@ def check_email(email):
 def check_login(email, password):
 
     # checks if the email and corresponding password are present in the database
-    #if loginDatabase.checkCredentials(email,password) == True:
+    if loginDatabase.checkCredentials(email,password) == True:
         return True
-    #else:
-    #    return False
+    else:
+        return False
 
 if __name__ == '__main__':       
     root = Tk()

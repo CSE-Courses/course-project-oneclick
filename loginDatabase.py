@@ -108,6 +108,4 @@ def check_tables():
     mycursor = mydb.cursor()
     print(mycursor.execute("SHOW TABLES"))
 
-create_table()
-addUser("einsteine98@gmail.com","test123")
-check_tables()
+
