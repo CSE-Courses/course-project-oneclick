@@ -26,7 +26,7 @@ class LoginWindow(Frame):
         self.login_button = Button(self, text='Login', command=self.login_clicked)
         self.login_button.grid(columnspan=2)
         self.label_create_acct.grid(columnspan=2)
-        
+        loginDatabase.create_users_table()
         self.pack()
     
     def login_clicked(self):

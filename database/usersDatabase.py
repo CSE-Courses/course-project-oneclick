@@ -21,19 +21,24 @@ def create_user_table(user_email):
                 "255) PRIMARY KEY, zoom_link " \
                 "VARCHAR(255), " \
                 "description VARCHAR(255), event_date DATE NOT NULL,start_time TIME NOT NULL, end_time TIME NOT " \
-                "NULL)".format(user_email)
+                "NULL)".format(change_email(user_email))
     print(statement)
     mcursor.execute(statement)
     print("table created")
     mysqldb.close()
 
+def change_email(email):
+
+    split_email = email.split("@")
+    split_email_again = split_email[1].split(".")
+    return split_email[0]+"_"+split_email_again[0]+"_"+split_email_again[1]
 
 def add_user_info(email,event_name,zoom_link,description,event_date,start_time,end_time):
     # event_date is a date object reference
     # start_time and end_time are time object references
     # email,event_name,zoom_link and description are strings
     create_user_table(email)
-    statement = "INSERT INTO `{}` (event_name,zoom_link,description,event_date,start_time,end_time) VALUES(%s,%s,%s,%s,%s,%s)".format(email)
+    statement = "INSERT INTO `{}` (event_name,zoom_link,description,event_date,start_time,end_time) VALUES(%s,%s,%s,%s,%s,%s)".format(change_email(email))
     print(statement)
     mysqldb = loginDatabase.connectToDatabase()
     print("connection done")
@@ -80,3 +85,5 @@ def drop_user_table(email):
 
 def update_user_table(email,event_name_bool,zoom_link_bool,decription_bool,date_bool,start_time_bool,end_time_bool,update):
    pass
+
+#print(get_user_events("sam@yahoo.com"))
