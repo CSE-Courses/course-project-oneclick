@@ -3,6 +3,8 @@ import re
 from tkcalendar import Calendar
 from database import loginDatabase
 from database import usersDatabase
+from datetime import date
+from datetime import time
 import eventscheduler
 class LoginWindow(Frame):
     def __init__(self, master):
@@ -209,7 +211,7 @@ class MainWindow(Frame):
         
     def trace_var(self,*args):
         if self.start_last_value == "59" and self.start_minstr.get() == "0":
-            self.start_hourstr.set(int(self.hourstr.get())+1 if self.start_hourstr.get() !="23" else 0)
+            self.start_hourstr.set(int(self.start_hourstr.get())+1 if self.start_hourstr.get() !="23" else 0)
         self.start_last_value = self.start_minstr.get()
     
     def recurring(self):
@@ -219,9 +221,17 @@ class MainWindow(Frame):
     def submit_event(self):
         import eventscheduler
 
-     #   usersDatabase.add_user_info(self.email, self.entry_event.get(), self.entry_link.get(), self.entry_descr.get(),
-      #                              self.start_hourstr.get(), self.give_time(self.var.get()),
-       #                             self.give_time(self.var.get()))
+        print(type(self.start_hourstr.get()))
+        print(type(self.start_minstr.get()))
+        print(self.calendar.get_date())
+
+        #exit(-1)
+        start_time = self.start_hourstr.get() + ":" + self.start_minstr.get() + ":" + "00"
+        end_time =  self.end_hourstr.get() + ":" + self.end_minstr.get() + ":" + "00"
+
+        usersDatabase.add_user_info(self.email, self.entry_event.get(), self.entry_link.get(), self.entry_descr.get('1.0', 'end-1c'),
+                                    self.give_date(self.calendar.get_date()), time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
+                                    time(int(self.end_hourstr.get()),int(self.end_minstr.get())))
         self.display_event()
         self.calendar.destroy()
         self.label_event.destroy()
@@ -246,7 +256,22 @@ class MainWindow(Frame):
         desc = Label(self.r_frame, text='Description: \n' + self.entry_descr.get('1.0', 'end-1c')).pack()
         link = Label(self.r_frame, text='Link: \n' + self.entry_link.get()).pack()
         times = Label(self.r_frame, text='Start Time: ' + self.start_hourstr.get() + ':' + self.start_minstr.get() + ' End Time: ' + self.end_hourstr.get() + ':' + self.end_minstr.get()).pack()
-        
+
+    def give_time(self, time_str):
+        # converts the string to a datetime object
+
+        split_time = time_str.split(":")
+        split_time_2 = []
+        if (split_time[1][2] == "A"):
+            time_str_2 = split_time[1].split("A")[0]
+            return time(int(split_time[0]), int(time_str_2))
+        else:
+            time_str_2 = split_time[1].split("P")[0]
+            return time(int(split_time[0]), int(time_str_2))
+
+    def give_date(self, date_str):
+        split_date = date_str.split("/")
+        return date(int("20" + split_date[2]), int(split_date[0]), int(split_date[1]))
         
 def check_password(password):
     regex = '\d.*?[A-Z].*?[a-z]'
