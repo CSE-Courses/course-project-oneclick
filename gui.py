@@ -104,70 +104,27 @@ class MainWindow(Frame):
         self.frame.pack(side=LEFT, fill=BOTH)
         self.add_button = Button(self.frame, text='Make Appointment', command=self.create_event)
         self.event_frame = Frame(master, width=240, height=720, bg='yellow')
-        self.my_events_label = Label(self.event_frame, text="My Events Today", bg='lightblue', font='bold', padx=1, pady=1)
+        self.my_events_label = Label(self.event_frame, text="My Events", bg='lightblue', font='bold', padx=1, pady=1)
         #self.event_one_label = Label(self.event_frame, text="Event One", bg='lightpink', font='bold', padx=20, pady=20)
         self.event_frame.pack(side=RIGHT, fill=BOTH)
-        event_dict = usersDatabase.get_user_events(self.email)
 
-        self.my_events_label.pack()
-        #self.event_one_label.pack()
-        for key in event_dict:
-            tup = event_dict[key]
-            info = key + '\n' + 'Description:' + tup[1] + '\n' + 'Zoom Link:' + tup[0] + '\n' + 'Date:' + tup[2].strftime('%m %d %Y') + '\n' + 'Start Time:' + str(tup[3]) + '\n' + 'End Time:' + str(tup[4])
-            self.event = Label(self.event_frame, text=info,bg='lightpink',font='bold',padx=20,pady=20)
-            self.event.pack()
+        def refresh():
+            event_dict = usersDatabase.get_user_events(self.email)
+
+            self.my_events_label.pack()
+            #self.event_one_label.pack()
+            for key in event_dict:
+                tup = event_dict[key]
+                date = tup[2].strftime('%m %d %Y')
+                str_date = date.split(' ')
+                new_date = str_date[0] + '/' + str_date[1] + '/' + str_date[2]
+                info = key + '\n' + 'Description:' + tup[1] + '\n' + 'Zoom Link:' + tup[0] + '\n' + 'Date:' + new_date + '\n' + 'Start Time:' + str(tup[3]) + '\n' + 'End Time:' + str(tup[4])
+                self.event = Label(self.event_frame, text=info,bg='lightpink',font='bold',padx=20,pady=20)
+                self.event.pack()
+        self.ref_func = refresh()
         self.add_button.pack()
 
-    #    def create_event(self):
-    #        self.label_event = Label(self, text='Event Name')
-    #        self.label_descr = Label(self, text='Description')
-    #        self.label_link = Label(self, text='Zoom Link')
-    # #       self.label_path = Label(self, test='Zoom path')
-    #
-    #        self.entry_event = Entry(self, width=64)
-    #        self.entry_descr = Entry(self, width=64)
-    #        self.entry_link = Entry(self, width=64)
-    # #       self.entry_path = Entry(self, width=64)
-    #
-    #        self.label_event.grid(row=1, sticky=E)
-    #        self.label_descr.grid(row=2, sticky=E)
-    #        self.label_link.grid(row=3, sticky=E)
-    # #       self.label_path.grid(row=6, sticky=E)
-    #
-    #        self.entry_event.grid(row=1, column=1)
-    #        self.entry_descr.grid(row=2, column=1)
-    #        self.entry_link.grid(row=3, column=1)
-    # #       self.entry_path.grid(row=6, column=1)
-    #
-    #        string = ':00'
-    #        option_list = []
-    #        var = StringVar(self)
-    #        option_list.append('12:00AM')
-    #        var.set(option_list[0])
-    #        for i in range(1,12):
-    #            option_list.append(str(i) + string + 'AM')
-    #        option_list.append('12:00PM')
-    #        for i in range(1,12):
-    #            option_list.append(str(i) + string + 'PM')
-    #        self.label_start = Label(self, text='Start Time').grid(row=4, column=0)
-    #        self.label_end = Label(self, text='End Time').grid(row=4, column=1)
-    #        self.start_time = OptionMenu(self, var, *option_list)
-    #        self.start_time.config(width=10)
-    #        self.end_time = OptionMenu(self, var, *option_list)
-    #        self.end_time.config(width=10)
-    #        self.start_time.grid(row=5, column=0)
-    #        self.end_time.grid(row=5, column=1)
-    #
-    #        self.submit_btn = Button(self, text='Submit', command = summit )
-    #        self.recur_check = Checkbutton(self, text='Recurring Meeting', command=self.recurring)
-    #        self.recur_check.grid(columnspan=2)
-    #        self.submit_btn.grid(columnspan=2)
-    #        self.pack()
-    #
-    #        self.frame = Frame(master, width=240, height=720, bg='red')
-    #        self.frame.pack(side=LEFT, fill=BOTH)
-    #        self.add_button = Button(self.frame, text='Make Appointment', command=self.create_event)
-    #        self.add_button.pack()
+
 
     def create_event(self):
 
@@ -257,6 +214,7 @@ class MainWindow(Frame):
                                     self.give_date(self.calendar.get_date()),
                                     time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
                                     time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
+        self.ref_func
         self.display_event()
         self.calendar.destroy()
         self.label_event.destroy()
@@ -334,9 +292,12 @@ def check_login(email, password):
         return False
 
 
+loginDatabase.createDatabase('accessapproved', 'one_click_users')
+
 if __name__ == '__main__':
     root = Tk()
     root.title('OneClick - Login')
     root.geometry('300x100')
     lw = LoginWindow(root)
     root.mainloop()
+

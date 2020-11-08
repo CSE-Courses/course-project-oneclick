@@ -15,7 +15,7 @@ def createDatabase(password, name):
         password=passwordStr
     )
     mycursor = mydb.cursor()
-    query = "CREATE DATABASE " + nameStr
+    query = "CREATE DATABASE IF NOT EXISTS " + nameStr
     mycursor.execute(query)
     print("Database successfully created")
 
