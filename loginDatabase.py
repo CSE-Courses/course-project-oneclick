@@ -2,7 +2,7 @@ import mysql.connector
 
 
 def createDatabase(password, name):
-    # creates a localhost database named, "oneclickusers"
+    # creates a localhost database named, "one_click_users"
     # enter password created when configuring MySQL on computer
     # only needs to be created once
     passwordStr = str(password)
@@ -14,7 +14,7 @@ def createDatabase(password, name):
         password=passwordStr
     )
     mycursor = mydb.cursor()
-    query = "CREATE DATABASE " + nameStr
+    query = "CREATE DATABASE IF NOT EXISTS " + nameStr
     mycursor.execute(query)
     print("Database successfully created")
 
@@ -23,7 +23,7 @@ def connectToDatabase():
     mydb = mysql.connector.connect (
         host="localhost",
         user="root",
-        password="accessapproved",
+        password="root",
         database="one_click_users"
     )
     return mydb
@@ -108,6 +108,4 @@ def check_tables():
     mycursor = mydb.cursor()
     print(mycursor.execute("SHOW TABLES"))
 
-create_table()
-addUser("einsteine98@gmail.com","test123")
-check_tables()
+
