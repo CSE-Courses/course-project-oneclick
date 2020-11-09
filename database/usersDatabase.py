@@ -22,9 +22,9 @@ def create_user_table(user_email):
                 "VARCHAR(255), " \
                 "description VARCHAR(255), event_date DATE NOT NULL,start_time TIME NOT NULL, end_time TIME NOT " \
                 "NULL)".format(change_email(user_email))
-    print(statement)
+   # print(statement)
     mcursor.execute(statement)
-    print("table created")
+   # print("table created")
     mysqldb.close()
 
 def change_email(email):
@@ -39,15 +39,15 @@ def add_user_info(email,event_name,zoom_link,description,event_date,start_time,e
     # email,event_name,zoom_link and description are strings
     create_user_table(email)
     statement = "INSERT INTO `{}` (event_name,zoom_link,description,event_date,start_time,end_time) VALUES(%s,%s,%s,%s,%s,%s)".format(change_email(email))
-    print(statement)
+   # print(statement)
     mysqldb = loginDatabase.connectToDatabase()
-    print("connection done")
+    #print("connection done")
     mcursor = mysqldb.cursor()
-    print("cursor obtained")
+    #print("cursor obtained")
     mcursor.execute(statement,(event_name,zoom_link,description,event_date.strftime("%Y-%m-%d"),start_time.strftime("%H:%M:%S"),end_time.strftime("%H:%M:%S")))
-    print("execute done!")
+    #print("execute done!")
     mysqldb.commit()
-    print("user info added")
+    #print("user info added")
     mysqldb.close()
 # create_user_table("mhertz@buffalo.edu")
 # add_user_info("mhertz@buffalo.edu","Garbage Collection","http://java.ociweb.com/mark/other-presentations/JavaGC.pdf","Let's destroy objects with no references pointing to them",datetime.date(2021,11,12),datetime.time(3,30,00),datetime.time(4,55,00))
@@ -86,4 +86,54 @@ def drop_user_table(email):
 def update_user_table(email,event_name_bool,zoom_link_bool,decription_bool,date_bool,start_time_bool,end_time_bool,update):
    pass
 
-#print(get_user_events("sam@yahoo.com"))
+def delete_user_event(email,event_name):
+
+    try:
+        new_email = change_email(email)
+        mysqldb = connectToDatabase()
+        cursor = mysqldb.cursor()
+        statement = "DELETE FROM {} WHERE event_name = '{}'".format(new_email, event_name)
+        cursor.execute(statement)
+        mysqldb.commit()
+        #print(cursor.rowcount(), "record deleted")
+
+    except mysql.connector.Error as error:
+        print(error)
+
+    finally:
+        cursor.close()
+        mysqldb.close()
+
+
+'''def check_overlap(email,date,start_time,end_time):
+    new_email = change_email(email)
+    mysqldb = connectToDatabase()
+    cursor = mysqldb.cursor()
+    statement = "SELECT * FROM {}".format(new_email)
+    cursor.execute(statement)
+    rows = cursor.fetchall()
+
+
+    for row in rows:
+        print(type(row[3]))
+        print(type(row[4]))
+        print(type(row[5]))
+        print('----------------------')
+
+
+check_overlap('atri@buffalo.edu', 5, 6, 7)'''
+
+
+
+
+'''dic = get_user_events('jzola@buffalo.edu')
+dict(dic)
+print(dic)
+
+tup = dic['Comp Sci for Kids']
+
+print(type(tup[2])) '''
+
+#delete_user_event("einsteine98@gmail.com", "random event")
+
+
