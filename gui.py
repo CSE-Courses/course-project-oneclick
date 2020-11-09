@@ -1,6 +1,10 @@
 from tkinter import *
 import re
-from tkcalendar import Calendar 
+from tkcalendar import Calendar
+from database import loginDatabase
+from database import usersDatabase
+from datetime import date
+from datetime import time
 import eventscheduler
 import time
 class LoginWindow(Frame):
@@ -23,7 +27,7 @@ class LoginWindow(Frame):
         self.login_button = Button(self, text='Login', command=self.login_clicked)
         self.login_button.grid(columnspan=2)
         self.label_create_acct.grid(columnspan=2)
-        
+        loginDatabase.create_users_table()
         self.pack()
     
     def login_clicked(self):
@@ -35,7 +39,7 @@ class LoginWindow(Frame):
             self.master = Tk()
             self.master.title('OneClick')
             self.master.geometry('1280x720')
-            app = MainWindow(self.master)
+            app = MainWindow(self.master, email)
         print(email)
         print(password)
         
@@ -78,6 +82,7 @@ class CreateAccount(Frame):
         pass_confirm = self.entry_pass_confirm.get()
         if check_email(email) and check_password(password) and check_confirm_pass(pass_confirm, password): 
             # Confirm account has been created in database
+            loginDatabase.addUser(email, password)
             self.master.destroy()
             self.master = Tk()
             self.master.title('Login')
@@ -89,8 +94,9 @@ class CreateAccount(Frame):
             self.entry_pass_confirm.delete(0, 'end')
             
 class MainWindow(Frame):
-    def __init__(self, master):
+    def __init__(self, master, email):
         super().__init__(master)
+        self.email = email
         self.pack()
         
         self.frame = Frame(master, width=240, height=720, bg='red')
@@ -156,9 +162,15 @@ class MainWindow(Frame):
                ,
                self.entry_event.get(),
                self.entry_descr.get("1.0","end-1c"),
-               self.entry_link.get(),
-               "zoom"
+               self.entry_link.get()
             )
+           # eventscheduler.run_popup(
+            #   eventscheduler.to_time_string(self.calendar.get_date(),self.start_hourstr.get()),
+             #  None,
+              # self.entry_descr.get("1.0","end-1c"),
+               #self.entry_link.get(),
+               #"zoom"
+            #)
             self.submit_event()
 
         self.submit_btn = Button(self.frame, text='Submit', command=lambda:run())
@@ -177,7 +189,18 @@ class MainWindow(Frame):
         
     def submit_event(self):
         import eventscheduler
-        
+
+        print(type(self.start_hourstr.get()))
+        print(type(self.start_minstr.get()))
+        print(self.calendar.get_date())
+
+        #exit(-1)
+        start_time = self.start_hourstr.get() + ":" + self.start_minstr.get() + ":" + "00"
+        end_time =  self.end_hourstr.get() + ":" + self.end_minstr.get() + ":" + "00"
+
+        usersDatabase.add_user_info(self.email, self.entry_event.get(), self.entry_link.get(), self.entry_descr.get('1.0', 'end-1c'),
+                                    self.give_date(self.calendar.get_date()), time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
+                                    time(int(self.end_hourstr.get()),int(self.end_minstr.get())))
         self.display_event()
         self.calendar.destroy()
         self.label_event.destroy()
@@ -204,6 +227,22 @@ class MainWindow(Frame):
         times = Label(self.r_frame, text='Start Time: ' + self.start_hourstr.get() + ':' + self.start_minstr.get() + ' End Time: ' + self.end_hourstr.get() + ':' + self.end_minstr.get()).pack()
         # Button(self, text='Login', command=self.login_clicked)
     #    delete = Button(self.r_frame,text="Delete").pack()
+
+    def give_time(self, time_str):
+        # converts the string to a datetime object
+
+        split_time = time_str.split(":")
+        split_time_2 = []
+        if (split_time[1][2] == "A"):
+            time_str_2 = split_time[1].split("A")[0]
+            return time(int(split_time[0]), int(time_str_2))
+        else:
+            time_str_2 = split_time[1].split("P")[0]
+            return time(int(split_time[0]), int(time_str_2))
+
+    def give_date(self, date_str):
+        split_date = date_str.split("/")
+        return date(int("20" + split_date[2]), int(split_date[0]), int(split_date[1]))
         
 def check_password(password):
     regex = '\d.*?[A-Z].*?[a-z]'
@@ -228,10 +267,10 @@ def check_email(email):
 def check_login(email, password):
 
     # checks if the email and corresponding password are present in the database
-    #if loginDatabase.checkCredentials(email,password) == True:
+    if loginDatabase.checkCredentials(email,password) == True:
         return True
-    #else:
-    #    return False
+    else:
+        return False
 
 if __name__ == '__main__':       
     root = Tk()

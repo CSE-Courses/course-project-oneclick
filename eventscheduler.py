@@ -32,29 +32,27 @@ def change_time(time_str,time,func):
     else:
         return month + '/' + day + '/' + year + '/' + hour + '/' + str(func(int(minute),time))
  
-def create_notification(event_name,time_before,time_of_event):     
-    finalDate = change_time(time_of_event,time_before,lambda a,b:a-b)
-    timestamp = time.mktime(datetime.datetime.strptime(finalDate, "%m/%d/%y/%H/%M").timetuple())
-    difference = int(timestamp - time.time())
-    def timer():
-        gui_popup.notification_start(event_name,time_before)         
-
-    my_timer = threading.Timer(difference, timer) 
-    my_timer.start()
-    print("Waiting notify...")
-def run_popup(finalDate,title,desc,link,zoom_position):
+#def create_notification(event_name,time_before,time_of_event):     
+#    finalDate = change_time(time_of_event,time_before,lambda a,b:a-b)
+#    timestamp = time.mktime(datetime.datetime.strptime(finalDate, "%m/%d/%y/%H/%M").timetuple())
+#    difference = int(timestamp - time.time())
+#    def timer():
+#        gui_popup.notification_start(event_name,time_before)         
+#
+#    my_timer = threading.Timer(difference, timer) 
+#    my_timer.start()
+#    print("Waiting notify...")
+def run_popup(finalDate,title,desc,link):
     #create_notification(title,5,finalDate)
-    global running
     timestamp = time.mktime(datetime.datetime.strptime(finalDate, "%m/%d/%y/%H/%M").timetuple())
     difference = int(timestamp - time.time())
     print(finalDate,datetime.datetime.now().strftime("%m/%d/%y/%H/%M"))
     print(timestamp,time.time())
     print(difference)
     def timer():
-        zoom_command=gui_popup.zoom_call_command(link,zoom_position)
+        zoom_command=gui_popup.zoom_call_command(link)
         gui_popup.event_pop_up(title,desc,zoom_command)    
 
     my_timer = threading.Timer(difference, timer)
     my_timer.start()
     print("Waiting...")
-##run_popup("10/19/20/9/43","class","desc","link","zoom")

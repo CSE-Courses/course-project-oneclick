@@ -23,7 +23,7 @@ def connectToDatabase():
     mydb = mysql.connector.connect (
         host="localhost",
         user="root",
-        password="accessapproved",
+        password="root",
         database="one_click_users"
     )
     return mydb
@@ -108,6 +108,4 @@ def check_tables():
     mycursor = mydb.cursor()
     print(mycursor.execute("SHOW TABLES"))
 
-create_table()
-addUser("einsteine98@gmail.com","test123")
-check_tables()
+
