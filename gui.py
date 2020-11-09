@@ -5,6 +5,7 @@ from database import loginDatabase
 from database import usersDatabase
 from datetime import date
 from datetime import time
+from PIL import Image, ImageTk
 import eventscheduler
 
 
@@ -41,6 +42,7 @@ class LoginWindow(Frame):
             self.master = Tk()
             self.master.title('OneClick')
             self.master.geometry('1280x720')
+            self.master.configure(bg='cornflowerblue')
             app = MainWindow(self.master, email)
         print(email)
         print(password)
@@ -104,7 +106,13 @@ class MainWindow(Frame):
         self.email = email
         self.pack()
 
-        self.frame = Frame(master, width=240, height=720, bg='red')
+        load = Image.open("oneclicklogo.png")
+        render = ImageTk.PhotoImage(load)
+        self.img = Label(self.master, image=render, bg='cornflowerblue')
+        self.img.image = render
+        self.img.place(x=350, y=40)
+
+        self.frame = Frame(master, width=240, height=720, bg='lightcoral')
         self.frame.pack(side=LEFT, fill=BOTH)
         self.add_button = Button(self.frame, text='Make Appointment', command=self.create_event)
         self.event_frame = Frame(master, width=240, height=720, bg='yellow')
@@ -312,7 +320,7 @@ def check_login(email, password):
         return False
 
 
-loginDatabase.createDatabase('accessapproved', 'one_click_users')
+loginDatabase.createDatabase('password123', 'one_click_users')
 
 if __name__ == '__main__':
     root = Tk()
@@ -321,4 +329,3 @@ if __name__ == '__main__':
     root.geometry('1000x1000')
     lw = LoginWindow(root)
     root.mainloop()
-
