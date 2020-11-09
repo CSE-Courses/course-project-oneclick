@@ -46,7 +46,7 @@ def event_pop_up(event_title,desc,command):
 
 #returns finalDate for "run_popup" input parameter
 def snooze(popup,link):
-    #snooze for 5 minutes
+    #snooze for 1 minute
     snooze_time = 1
     snooze_timestamp = snooze_time * 60
     ts = time.time()
