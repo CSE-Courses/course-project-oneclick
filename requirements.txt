@@ -1,0 +1,5 @@
+gobject==0.1.0
+mysql==0.0.2
+mysqlclient==2.0.1
+PyGObject==3.38.0
+tkcalendar==1.6.1
