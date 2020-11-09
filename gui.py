@@ -12,9 +12,10 @@ class LoginWindow(Frame):
     def __init__(self, master):
         super().__init__(master)
 
-        self.label_email = Label(self, text='Email')
-        self.label_password = Label(self, text='Password')
-        self.label_create_acct = Label(self, text='Create Account', fg='blue', cursor='hand2')
+        Frame.configure(self,bg='gainsboro')
+        self.label_email = Label(self, text='Email', bg='gainsboro')
+        self.label_password = Label(self, text='Password', bg='gainsboro')
+        self.label_create_acct = Label(self, text='Create Account', fg='blue', cursor='hand2',bg='gainsboro')
         self.label_create_acct.bind('<Button-1>', lambda e: self.create_clicked())
 
         self.entry_email = Entry(self)
@@ -48,7 +49,8 @@ class LoginWindow(Frame):
         self.master.destroy()
         self.master = Tk()
         self.master.title('Create Account')
-        self.master.geometry('300x150')
+        self.master.geometry('1000x1000')
+        self.master.configure(bg='DarkGoldenrod1')
         app = CreateAccount(self.master)
 
 
@@ -56,9 +58,11 @@ class CreateAccount(Frame):
     def __init__(self, master):
         super().__init__(master)
 
-        self.label_email = Label(self, text='Email')
-        self.label_password = Label(self, text='Password')
-        self.label_pass_confirm = Label(self, text='Confirm Password')
+
+        Frame.configure(self,bg='RosyBrown1')
+        self.label_email = Label(self, text='Email',bg='RosyBrown2')
+        self.label_password = Label(self, text='Password', bg='RosyBrown2')
+        self.label_pass_confirm = Label(self, text='Confirm Password', bg='RosyBrown2')
 
         self.entry_email = Entry(self)
         self.entry_password = Entry(self, show='*')
@@ -71,7 +75,7 @@ class CreateAccount(Frame):
         self.entry_password.grid(row=1, column=1)
         self.entry_pass_confirm.grid(row=2, column=1)
 
-        self.create_button = Button(self, text='Create Account', command=self.create_account)
+        self.create_button = Button(self, text='Create Account', bg='RosyBrown2', command=self.create_account)
         self.create_button.grid(columnspan=2)
 
         self.pack()
@@ -86,7 +90,7 @@ class CreateAccount(Frame):
             self.master.destroy()
             self.master = Tk()
             self.master.title('Login')
-            self.master.geometry('300x100')
+            self.master.geometry('1000x1000')
             app = LoginWindow(self.master)
         else:
             self.entry_email.delete(0, 'end')
@@ -110,17 +114,30 @@ class MainWindow(Frame):
 
         def refresh():
             event_dict = usersDatabase.get_user_events(self.email)
-
+         #   for widget in self.event_frame.winfo_children():
+          #      widget.destroy()
             self.my_events_label.pack()
             #self.event_one_label.pack()
+
+
+
             for key in event_dict:
                 tup = event_dict[key]
+                size = len(tup)
                 date = tup[2].strftime('%m %d %Y')
                 str_date = date.split(' ')
                 new_date = str_date[0] + '/' + str_date[1] + '/' + str_date[2]
                 info = key + '\n' + 'Description:' + tup[1] + '\n' + 'Zoom Link:' + tup[0] + '\n' + 'Date:' + new_date + '\n' + 'Start Time:' + str(tup[3]) + '\n' + 'End Time:' + str(tup[4])
-                self.event = Label(self.event_frame, text=info,bg='lightpink',font='bold',padx=20,pady=20)
-                self.event.pack()
+                event = Label(self.event_frame, text=info,bg='lightpink',font='bold',padx=20,pady=20)
+                event.pack()
+                self.del_button = Button(self.event_frame, text='Delete Event', bg ='hot pink', command=lambda: usersDatabase.delete_user_event(self.email,key))
+                self.del_button.pack()
+
+
+
+
+
+
         self.ref_func = refresh()
         self.add_button.pack()
 
@@ -201,9 +218,12 @@ class MainWindow(Frame):
     def submit_event(self):
         import eventscheduler
 
-        print(type(self.start_hourstr.get()))
-        print(type(self.start_minstr.get()))
-        print(self.calendar.get_date())
+    #    if not usersDatabase.check_overlap(self.email, self.give_date(self.calendar.get_date()), time(int(self.start_hourstr.get()), int(self.start_minstr.get())), time(int(self.end_hourstr.get()), int(self.end_minstr.get()))):
+     #       pass
+
+    #    print(type(self.start_hourstr.get()))
+     #   print(type(self.start_minstr.get()))
+     #   print(self.calendar.get_date())
 
         # exit(-1)
         start_time = self.start_hourstr.get() + ":" + self.start_minstr.get() + ":" + "00"
@@ -297,7 +317,8 @@ loginDatabase.createDatabase('accessapproved', 'one_click_users')
 if __name__ == '__main__':
     root = Tk()
     root.title('OneClick - Login')
-    root.geometry('300x100')
+    root.configure(bg='DarkGoldenrod1')
+    root.geometry('1000x1000')
     lw = LoginWindow(root)
     root.mainloop()
 

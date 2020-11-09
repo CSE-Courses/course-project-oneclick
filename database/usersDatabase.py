@@ -86,12 +86,54 @@ def drop_user_table(email):
 def update_user_table(email,event_name_bool,zoom_link_bool,decription_bool,date_bool,start_time_bool,end_time_bool,update):
    pass
 
-dic = get_user_events('jzola@buffalo.edu')
+def delete_user_event(email,event_name):
+
+    try:
+        new_email = change_email(email)
+        mysqldb = connectToDatabase()
+        cursor = mysqldb.cursor()
+        statement = "DELETE FROM {} WHERE event_name = '{}'".format(new_email, event_name)
+        cursor.execute(statement)
+        mysqldb.commit()
+        #print(cursor.rowcount(), "record deleted")
+
+    except mysql.connector.Error as error:
+        print(error)
+
+    finally:
+        cursor.close()
+        mysqldb.close()
+
+
+'''def check_overlap(email,date,start_time,end_time):
+    new_email = change_email(email)
+    mysqldb = connectToDatabase()
+    cursor = mysqldb.cursor()
+    statement = "SELECT * FROM {}".format(new_email)
+    cursor.execute(statement)
+    rows = cursor.fetchall()
+
+
+    for row in rows:
+        print(type(row[3]))
+        print(type(row[4]))
+        print(type(row[5]))
+        print('----------------------')
+
+
+check_overlap('atri@buffalo.edu', 5, 6, 7)'''
+
+
+
+
+'''dic = get_user_events('jzola@buffalo.edu')
 dict(dic)
 print(dic)
 
 tup = dic['Comp Sci for Kids']
 
-print(type(tup[2]))
+print(type(tup[2])) '''
+
+#delete_user_event("einsteine98@gmail.com", "random event")
 
 
