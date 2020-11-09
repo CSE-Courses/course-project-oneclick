@@ -7,7 +7,7 @@ def connectToDatabase():
     mydb = mysql.connector.connect (
         host="localhost",
         user="root",
-        password="root",
+        password="accessapproved",
         database="one_click_users"
     )
     return mydb
@@ -15,7 +15,7 @@ def connectToDatabase():
 def create_user_table(user_email):
     # creates table with email and password as columns
 
-    mysqldb = loginDatabase.connectToDatabase()
+    mysqldb = connectToDatabase()
     mcursor = mysqldb.cursor()
     statement = "CREATE TABLE IF NOT EXISTS `{}` (event_name VARCHAR(" \
                 "255) PRIMARY KEY, zoom_link " \
@@ -40,11 +40,11 @@ def add_user_info(email,event_name,zoom_link,description,event_date,start_time,e
     create_user_table(email)
     statement = "INSERT INTO `{}` (event_name,zoom_link,description,event_date,start_time,end_time) VALUES(%s,%s,%s,%s,%s,%s)".format(change_email(email))
    # print(statement)
-    mysqldb = loginDatabase.connectToDatabase()
+    mysqldb = connectToDatabase()
     #print("connection done")
     mcursor = mysqldb.cursor()
     #print("cursor obtained")
-    mcursor.execute(statement,(event_name,zoom_link,description,event_date.strftime("%Y-%m-%d"),start_time.strftime("%H:%M:%S"),end_time.strftime("%H:%M:%S")))
+    mcursor.execute(statement,(event_name,zoom_link,description,event_date.strftime("%Y-%m-%d"),start_time,end_time))
     #print("execute done!")
     mysqldb.commit()
     #print("user info added")

@@ -1,8 +1,11 @@
 import tkinter as tk
 from tkinter import CENTER
 from tkinter import ttk
+from datetime import datetime
+import time
+import eventscheduler
 import os
-import gi
+#import gi
 #gi.require_version('Notify', '0.7')
 #from gi.repository import Notify
 TITLE_FONT= ("Verdana", 20)
@@ -35,10 +38,24 @@ def event_pop_up(event_title,desc,command):
     B1 = ttk.Button(popup, text="Open", command =lambda : run_on_click(popup,command) )
     
     B2 = ttk.Button(popup, text="Do Not Disturb", command =lambda : toggle_run(popup)  )
+    B3=ttk.Button(popup,text="Snooze", command=lambda :snooze(popup,command))
     B1.pack()
     B2.pack()
-    
+    B3.pack()
     popup.mainloop()
+
+#returns finalDate for "run_popup" input parameter
+def snooze(popup,link):
+    #snooze for 5 minutes
+    snooze_time = 1
+    snooze_timestamp = snooze_time * 60
+    ts = time.time()
+    future_ts = ts + snooze_timestamp
+    snooze_date = datetime.fromtimestamp(future_ts).strftime("%m/%d/%y/%H/%M")
+    eventscheduler.run_popup(str(snooze_date),"Snooze","Appointment Reminder",link)
+    popup.destroy()
+    return snooze_date
+
 
 '''def notification_start(event_name,time_till):
     Notify.init(event_name)

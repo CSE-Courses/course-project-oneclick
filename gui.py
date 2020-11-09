@@ -142,10 +142,6 @@ class MainWindow(Frame):
                 self.del_button.pack()
 
 
-
-
-
-
         self.ref_func = refresh()
         self.add_button.pack()
 
@@ -205,6 +201,7 @@ class MainWindow(Frame):
             return  self.calendar.get_date()+f"/{hour}"+f"/{minute}"
              
         def run():
+
             eventscheduler.run_popup(
                time_date_str(
                    self.start_hourstr.get(),
@@ -215,9 +212,9 @@ class MainWindow(Frame):
                self.entry_descr.get("1.0","end-1c"),
                self.entry_link.get()
             )
-
+            self.submit_event()
         
-        self.submit_btn = Button(self.frame, text='Submit', command=lambda: run())
+        self.submit_btn = Button(self.frame, text='Submit', command= run)
         self.recur_check = Checkbutton(self.frame, text='Recurring Meeting', command=self.recurring)
         self.recur_check.pack()
         self.submit_btn.pack()
@@ -247,11 +244,11 @@ class MainWindow(Frame):
 
         usersDatabase.add_user_info(self.email, self.entry_event.get(), self.entry_link.get(),
                                     self.entry_descr.get('1.0', 'end-1c'),
-                                    self.give_date(self.calendar.get_date()),
-                                    time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
-                                    time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
+                                    self.give_date(self.calendar.get_date()),"00","00")
+          #                          ,time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
+                                  # time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
         self.ref_func
-        self.display_event()
+       # self.display_event()
         self.calendar.destroy()
         self.label_event.destroy()
         self.label_descr.destroy()
@@ -328,7 +325,7 @@ def check_login(email, password):
         return False
 
 
-loginDatabase.createDatabase('password123', 'one_click_users')
+loginDatabase.createDatabase('accessapproved', 'one_click_users')
 
 if __name__ == '__main__':
     root = Tk()
