@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['cli.py'],
+a = Analysis(['gui.py'],
              pathex=['C:\\Users\\hopau\\Documents\\Buffalo 20-21\\Fall\\CSE 442\\OneClick'],
              binaries=[],
              datas=[],
