@@ -10,12 +10,13 @@ def createDatabase(password, name):
     nameStr = str(name)
 
     mydb = mysql.connector.connect (
-        host="localhost",
+        host="127.0.0.1",
         user="root",
-        password=passwordStr
+        password=passwordStr,
+        auth_plugin = 'mysql_native_password'
     )
     mycursor = mydb.cursor()
-    query = "CREATE DATABASE " + nameStr
+    query = "CREATE DATABASE IF NOT EXISTS " + nameStr
     mycursor.execute(query)
     print("Database successfully created")
 
@@ -72,6 +73,8 @@ def addUser(email, password):
         mydb.close()
         print(mycursor.rowcount, "Record Inserted")
         usersDatabase.create_user_table(email)
+        print("Table added")
+
 
 
 def removeUser(email):

@@ -1,0 +1,67 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/a3c87ab5/
+BODY_FONT	gui_popup.py	/^BODY_FONT = ("Verdana", 12)$/;"	v
+CreateAccount	gui.py	/^class CreateAccount(Frame):$/;"	c
+LoginWindow	gui.py	/^class LoginWindow(Frame):$/;"	c
+MainWindow	gui.py	/^class MainWindow(Frame):$/;"	c
+OneClick	README.md	/^# OneClick$/;"	c
+TITLE_FONT	gui_popup.py	/^TITLE_FONT= ("Verdana", 20)$/;"	v
+__init__	gui.py	/^    def __init__(self, master):$/;"	m	class:CreateAccount
+__init__	gui.py	/^    def __init__(self, master):$/;"	m	class:LoginWindow
+__init__	gui.py	/^    def __init__(self, master):$/;"	m	class:MainWindow
+addUser	database/loginDatabase.py	/^def addUser(email, password):$/;"	f
+addUser	loginDatabase.py	/^def addUser(email, password):$/;"	f
+add_user_info	database/calendarDatabase.py	/^def add_user_info(email,event_name,zoom_link,description,event_date,start_time,end_time):$/;"	f
+c	gui.py	/^        c = lambda: eventscheduler.run_popup($/;"	f	member:MainWindow.create_event	file:
+change_time	eventscheduler.py	/^def change_time(time_str,time,func):$/;"	f
+checkCredentials	database/loginDatabase.py	/^def checkCredentials(email,password):$/;"	f
+checkDuplicate	loginDatabase.py	/^def checkDuplicate(email):$/;"	f
+check_confirm_pass	gui.py	/^def check_confirm_pass(pass_confirm, password):$/;"	f
+check_email	gui.py	/^def check_email(email):$/;"	f
+check_login	gui.py	/^def check_login(email, password):$/;"	f
+check_password	gui.py	/^def check_password(password):$/;"	f
+check_tables	database/loginDatabase.py	/^def check_tables():$/;"	f
+check_tables	loginDatabase.py	/^def check_tables():$/;"	f
+connectToDatabase	database/loginDatabase.py	/^def connectToDatabase():$/;"	f
+connectToDatabase	loginDatabase.py	/^def connectToDatabase():$/;"	f
+createDatabase	database/loginDatabase.py	/^def createDatabase(password, name):$/;"	f
+createDatabase	loginDatabase.py	/^def createDatabase(password, name):$/;"	f
+create_account	gui.py	/^    def create_account(self):$/;"	m	class:CreateAccount
+create_clicked	gui.py	/^    def create_clicked(self):$/;"	m	class:LoginWindow
+create_event	gui.py	/^    def create_event(self):$/;"	m	class:MainWindow
+create_notification	eventscheduler.py	/^def create_notification(event_name,time_before,time_of_event):     $/;"	f
+create_table	database/loginDatabase.py	/^def create_table():$/;"	f
+create_table	loginDatabase.py	/^def create_table():$/;"	f
+create_user_table	database/calendarDatabase.py	/^def create_user_table(user_email):$/;"	f
+display_event	gui.py	/^    def display_event(self):$/;"	m	class:MainWindow
+event_pop_up	gui_popup.py	/^def event_pop_up(event_title,desc,command):$/;"	f
+len_month	eventscheduler.py	/^    def len_month(month,year):$/;"	f	function:change_time	file:
+login_clicked	gui.py	/^    def login_clicked(self):$/;"	m	class:LoginWindow
+lw	gui.py	/^    lw = LoginWindow(root)$/;"	v
+notification_start	gui_popup.py	/^def notification_start(event_name,time_till):$/;"	f
+printUsers	database/loginDatabase.py	/^def printUsers():$/;"	f
+printUsers	loginDatabase.py	/^def printUsers():$/;"	f
+print_sel	calendarS.py	/^    def print_sel():$/;"	f	function:showCalendar	file:
+recurring	gui.py	/^    def recurring(self):$/;"	m	class:MainWindow
+removeUser	database/loginDatabase.py	/^def removeUser(email):$/;"	f
+removeUser	loginDatabase.py	/^def removeUser(email):$/;"	f
+root	calendarS.py	/^root = tk.Tk()$/;"	v
+root	gui.py	/^    root = Tk()$/;"	v
+run	gui.py	/^        def run():$/;"	f	member:MainWindow.create_event	file:
+run_on_click	gui_popup.py	/^def run_on_click(popup,command):$/;"	f
+run_popup	eventscheduler.py	/^def run_popup(finalDate,title,desc,link,zoom_position):$/;"	f
+showCalendar	calendarS.py	/^def showCalendar():$/;"	f
+submit_event	gui.py	/^    def submit_event(self):$/;"	m	class:MainWindow
+timer	eventscheduler.py	/^    def timer():$/;"	f	function:create_notification	file:
+timer	eventscheduler.py	/^    def timer():$/;"	f	function:run_popup	file:
+tk	calendarS.py	/^import tkinter as tk$/;"	I
+tk	gui_popup.py	/^import tkinter as tk$/;"	I
+to_time_string	eventscheduler.py	/^def to_time_string(date, time):$/;"	f
+trace_var	gui.py	/^    def trace_var(self,*args):$/;"	m	class:MainWindow
+zoom_call_command	gui_popup.py	/^def zoom_call_command(link, zoom_path):$/;"	f
