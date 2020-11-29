@@ -10,14 +10,18 @@ import eventscheduler
 import time
 
 
+
 class LoginWindow(Frame):
     def __init__(self, master):
         super().__init__(master)
 
-        Frame.configure(self,bg='gainsboro')
-        self.label_email = Label(self, text='Email', bg='gainsboro')
-        self.label_password = Label(self, text='Password', bg='gainsboro')
-        self.label_create_acct = Label(self, text='Create Account', fg='blue', cursor='hand2',bg='gainsboro')
+
+        #page_color = '#00c6d4'
+        page_color = 'DarkGoldenrod1'
+        Frame.configure(self,bg=page_color)
+        self.label_email = Label(self, text='Email', bg=page_color, font='ComicSansMS 25 bold')
+        self.label_password = Label(self, text='Password', bg=page_color, font='ComicSansMS 25 bold')
+        self.label_create_acct = Label(self, text='Create Account', fg='blue', font='ComicSansMS', cursor='hand2',bg=page_color)
         self.label_create_acct.bind('<Button-1>', lambda e: self.create_clicked())
 
         self.entry_email = Entry(self)
@@ -28,11 +32,14 @@ class LoginWindow(Frame):
         self.entry_email.grid(row=0, column=1)
         self.entry_password.grid(row=1, column=1)
 
-        self.login_button = Button(self, text='Login', command=self.login_clicked)
+        self.login_button = Button(self, text='Login', font='ComicSansMS 15 bold', fg='lime green', command=self.login_clicked)
         self.login_button.grid(columnspan=2)
         self.label_create_acct.grid(columnspan=2)
         loginDatabase.create_users_table()
+
+
         self.pack()
+        self.place(x=330, y=330)
 
     def login_clicked(self):
         # Check database for username and password and allow/disallow access
@@ -53,6 +60,7 @@ class LoginWindow(Frame):
         self.master = Tk()
         self.master.title('Create Account')
         self.master.geometry('1000x1000')
+        page_color = '#00c6d4'
         self.master.configure(bg='DarkGoldenrod1')
         app = CreateAccount(self.master)
 
@@ -61,11 +69,12 @@ class CreateAccount(Frame):
     def __init__(self, master):
         super().__init__(master)
 
-
-        Frame.configure(self,bg='RosyBrown1')
-        self.label_email = Label(self, text='Email',bg='RosyBrown2')
-        self.label_password = Label(self, text='Password', bg='RosyBrown2')
-        self.label_pass_confirm = Label(self, text='Confirm Password', bg='RosyBrown2')
+        #page_color = '#00c6d4'
+        page_color = 'DarkGoldenrod1'
+        Frame.configure(self,bg=page_color)
+        self.label_email = Label(self, text='Email',bg=page_color,font='ComicSansMS 25 bold')
+        self.label_password = Label(self, text='Password', bg=page_color, font='ComicSansMS 25 bold')
+        self.label_pass_confirm = Label(self, text='Confirm Password', bg=page_color, font='ComicSansMS 25 bold')
 
         self.entry_email = Entry(self)
         self.entry_password = Entry(self, show='*')
@@ -78,9 +87,10 @@ class CreateAccount(Frame):
         self.entry_password.grid(row=1, column=1)
         self.entry_pass_confirm.grid(row=2, column=1)
 
-        self.create_button = Button(self, text='Create Account', bg='RosyBrown2', command=self.create_account)
+        self.create_button = Button(self, text='Create Account', bg= page_color, fg='brown', font='ComicSansMS',command=self.create_account)
         self.create_button.grid(columnspan=2)
         self.pack()
+        self.place(x=330, y=330)
 
     def create_account(self):
         email = self.entry_email.get()
@@ -138,7 +148,7 @@ class MainWindow(Frame):
                 info = key + '\n' + 'Description:' + tup[1] + '\n' + 'Zoom Link:' + tup[0] + '\n' + 'Date:' + new_date + '\n' + 'Start Time:' + str(tup[3]) + '\n' + 'End Time:' + str(tup[4])
                 event = Label(self.event_frame, text=info,bg='lightpink',font='bold',padx=20,pady=20)
                 event.pack()
-                self.del_button = Button(self.event_frame, text='Delete Event', bg ='hot pink', command=lambda: usersDatabase.delete_user_event(self.email,key))
+                self.del_button = Button(self.event_frame, text='Delete Event', bg ='hot pink', command=lambda i = key: usersDatabase.delete_user_event(self.email,i))
                 self.del_button.pack()
 
 
@@ -328,6 +338,7 @@ def check_login(email, password):
 loginDatabase.createDatabase('accessapproved', 'one_click_users')
 
 if __name__ == '__main__':
+    page_color = '#00c6d4'
     root = Tk()
     root.title('OneClick - Login')
     root.configure(bg='DarkGoldenrod1')
