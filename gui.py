@@ -162,7 +162,7 @@ class MainWindow(Frame):
                                          command=lambda i=key: dynamic_delete(i))
                 self.del_button.pack()
 
-        refresh()
+        ref_func = refresh()
         self.add_button.pack()
 
     def create_event(self):
@@ -264,7 +264,6 @@ class MainWindow(Frame):
                                     self.give_date(self.calendar.get_date()), "00", "00")
         #                          ,time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
         # time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
-        self.ref_func
         # self.display_event()
         self.calendar.destroy()
         self.label_event.destroy()
