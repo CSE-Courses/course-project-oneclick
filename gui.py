@@ -10,18 +10,17 @@ import eventscheduler
 import time
 
 
-
 class LoginWindow(Frame):
     def __init__(self, master):
         super().__init__(master)
 
-
-        #page_color = '#00c6d4'
+        # page_color = '#00c6d4'
         page_color = 'DarkGoldenrod1'
-        Frame.configure(self,bg=page_color)
+        Frame.configure(self, bg=page_color)
         self.label_email = Label(self, text='Email', bg=page_color, font='ComicSansMS 25 bold')
         self.label_password = Label(self, text='Password', bg=page_color, font='ComicSansMS 25 bold')
-        self.label_create_acct = Label(self, text='Create Account', fg='blue', font='ComicSansMS', cursor='hand2',bg=page_color)
+        self.label_create_acct = Label(self, text='Create Account', fg='blue', font='ComicSansMS', cursor='hand2',
+                                       bg=page_color)
         self.label_create_acct.bind('<Button-1>', lambda e: self.create_clicked())
 
         self.entry_email = Entry(self)
@@ -32,11 +31,11 @@ class LoginWindow(Frame):
         self.entry_email.grid(row=0, column=1)
         self.entry_password.grid(row=1, column=1)
 
-        self.login_button = Button(self, text='Login', font='ComicSansMS 15 bold', fg='lime green', command=self.login_clicked)
+        self.login_button = Button(self, text='Login', font='ComicSansMS 15 bold', fg='lime green',
+                                   command=self.login_clicked)
         self.login_button.grid(columnspan=2)
         self.label_create_acct.grid(columnspan=2)
         loginDatabase.create_users_table()
-
 
         self.pack()
         self.place(x=330, y=330)
@@ -69,10 +68,10 @@ class CreateAccount(Frame):
     def __init__(self, master):
         super().__init__(master)
 
-        #page_color = '#00c6d4'
+        # page_color = '#00c6d4'
         page_color = 'DarkGoldenrod1'
-        Frame.configure(self,bg=page_color)
-        self.label_email = Label(self, text='Email',bg=page_color,font='ComicSansMS 25 bold')
+        Frame.configure(self, bg=page_color)
+        self.label_email = Label(self, text='Email', bg=page_color, font='ComicSansMS 25 bold')
         self.label_password = Label(self, text='Password', bg=page_color, font='ComicSansMS 25 bold')
         self.label_pass_confirm = Label(self, text='Confirm Password', bg=page_color, font='ComicSansMS 25 bold')
 
@@ -87,7 +86,8 @@ class CreateAccount(Frame):
         self.entry_password.grid(row=1, column=1)
         self.entry_pass_confirm.grid(row=2, column=1)
 
-        self.create_button = Button(self, text='Create Account', bg= page_color, fg='brown', font='ComicSansMS',command=self.create_account)
+        self.create_button = Button(self, text='Create Account', bg=page_color, fg='brown', font='ComicSansMS',
+                                    command=self.create_account)
         self.create_button.grid(columnspan=2)
         self.pack()
         self.place(x=330, y=330)
@@ -127,35 +127,43 @@ class MainWindow(Frame):
         self.add_button = Button(self.frame, text='Make Appointment', command=self.create_event)
         self.event_frame = Frame(master, width=240, height=720, bg='yellow')
         self.my_events_label = Label(self.event_frame, text="My Events", bg='lightblue', font='bold', padx=1, pady=1)
-        #self.event_one_label = Label(self.event_frame, text="Event One", bg='lightpink', font='bold', padx=20, pady=20)
+        # self.event_one_label = Label(self.event_frame, text="Event One", bg='lightpink', font='bold', padx=20, pady=20)
         self.event_frame.pack(side=RIGHT, fill=BOTH)
+
+        def dynamic_delete(event_name):
+            usersDatabase.delete_user_event(self.email, event_name)
+            self.master.destroy()
+            self.master = Tk()
+            self.master.title('OneClick')
+            self.master.geometry('1280x720')
+            self.master.configure(bg='cornflowerblue')
+            app = MainWindow(self.master, email)
 
         def refresh():
             event_dict = usersDatabase.get_user_events(self.email)
-         #   for widget in self.event_frame.winfo_children():
-          #      widget.destroy()
+            #   for widget in self.event_frame.winfo_children():
+            #      widget.destroy()
             self.my_events_label.pack()
-            #self.event_one_label.pack()
-
-
+            # self.event_one_label.pack()
 
             for key in event_dict:
+                print("Here -- inside!")
                 tup = event_dict[key]
                 size = len(tup)
                 date = tup[2].strftime('%m %d %Y')
                 str_date = date.split(' ')
                 new_date = str_date[0] + '/' + str_date[1] + '/' + str_date[2]
-                info = key + '\n' + 'Description:' + tup[1] + '\n' + 'Zoom Link:' + tup[0] + '\n' + 'Date:' + new_date + '\n' + 'Start Time:' + str(tup[3]) + '\n' + 'End Time:' + str(tup[4])
-                event = Label(self.event_frame, text=info,bg='lightpink',font='bold',padx=20,pady=20)
+                info = key + '\n' + 'Description:' + tup[1] + '\n' + 'Zoom Link:' + tup[
+                    0] + '\n' + 'Date:' + new_date + '\n' + 'Start Time:' + str(tup[3]) + '\n' + 'End Time:' + str(
+                    tup[4])
+                event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=20, pady=20)
                 event.pack()
-                self.del_button = Button(self.event_frame, text='Delete Event', bg ='hot pink', command=lambda i = key: usersDatabase.delete_user_event(self.email,i))
+                self.del_button = Button(self.event_frame, text='Delete Event', bg='hot pink',
+                                         command=lambda i=key: dynamic_delete(i))
                 self.del_button.pack()
 
-
-        self.ref_func = refresh()
+        refresh()
         self.add_button.pack()
-
-
 
     def create_event(self):
 
@@ -204,27 +212,26 @@ class MainWindow(Frame):
                                state="readonly")
         self.end_hour.pack(side=LEFT)
         self.end_min.pack(side=LEFT)
-        
-        def time_date_str(hour,minute):
-            min_str=lambda min: "0"+ min if int(min) < 10 else min   
-            minute =  min_str(minute)
-            return  self.calendar.get_date()+f"/{hour}"+f"/{minute}"
-             
-        def run():
 
+        def time_date_str(hour, minute):
+            min_str = lambda min: "0" + min if int(min) < 10 else min
+            minute = min_str(minute)
+            return self.calendar.get_date() + f"/{hour}" + f"/{minute}"
+
+        def run():
             eventscheduler.run_popup(
-               time_date_str(
-                   self.start_hourstr.get(),
-                   self.start_minstr.get()
-               )   
-               ,
-               self.entry_event.get(),
-               self.entry_descr.get("1.0","end-1c"),
-               self.entry_link.get()
+                time_date_str(
+                    self.start_hourstr.get(),
+                    self.start_minstr.get()
+                )
+                ,
+                self.entry_event.get(),
+                self.entry_descr.get("1.0", "end-1c"),
+                self.entry_link.get()
             )
             self.submit_event()
-        
-        self.submit_btn = Button(self.frame, text='Submit', command= run)
+
+        self.submit_btn = Button(self.frame, text='Submit', command=run)
         self.recur_check = Checkbutton(self.frame, text='Recurring Meeting', command=self.recurring)
         self.recur_check.pack()
         self.submit_btn.pack()
@@ -241,12 +248,12 @@ class MainWindow(Frame):
     def submit_event(self):
         import eventscheduler
 
-    #    if not usersDatabase.check_overlap(self.email, self.give_date(self.calendar.get_date()), time(int(self.start_hourstr.get()), int(self.start_minstr.get())), time(int(self.end_hourstr.get()), int(self.end_minstr.get()))):
-     #       pass
+        #    if not usersDatabase.check_overlap(self.email, self.give_date(self.calendar.get_date()), time(int(self.start_hourstr.get()), int(self.start_minstr.get())), time(int(self.end_hourstr.get()), int(self.end_minstr.get()))):
+        #       pass
 
-    #    print(type(self.start_hourstr.get()))
-     #   print(type(self.start_minstr.get()))
-     #   print(self.calendar.get_date())
+        #    print(type(self.start_hourstr.get()))
+        #   print(type(self.start_minstr.get()))
+        #   print(self.calendar.get_date())
 
         # exit(-1)
         start_time = self.start_hourstr.get() + ":" + self.start_minstr.get() + ":" + "00"
@@ -254,11 +261,11 @@ class MainWindow(Frame):
 
         usersDatabase.add_user_info(self.email, self.entry_event.get(), self.entry_link.get(),
                                     self.entry_descr.get('1.0', 'end-1c'),
-                                    self.give_date(self.calendar.get_date()),"00","00")
-          #                          ,time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
-                                  # time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
+                                    self.give_date(self.calendar.get_date()), "00", "00")
+        #                          ,time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
+        # time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
         self.ref_func
-       # self.display_event()
+        # self.display_event()
         self.calendar.destroy()
         self.label_event.destroy()
         self.label_descr.destroy()
@@ -282,7 +289,7 @@ class MainWindow(Frame):
         desc = Label(self.r_frame, text='Description: \n' + self.entry_descr.get('1.0', 'end-1c')).pack()
         link = Label(self.r_frame, text='Link: \n' + self.entry_link.get()).pack()
         times = Label(self.r_frame,
-        text='Start Time: ' + self.start_hourstr.get() + ':' + self.start_minstr.get() + ' End Time: ' + self.end_hourstr.get() + ':' + self.end_minstr.get()).pack()
+                      text='Start Time: ' + self.start_hourstr.get() + ':' + self.start_minstr.get() + ' End Time: ' + self.end_hourstr.get() + ':' + self.end_minstr.get()).pack()
 
     def give_time(self, time_str):
         # converts the string to a datetime object
