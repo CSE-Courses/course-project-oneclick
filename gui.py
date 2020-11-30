@@ -17,6 +17,14 @@ class LoginWindow(Frame):
         # page_color = '#00c6d4'
         page_color = 'DarkGoldenrod1'
         Frame.configure(self, bg=page_color)
+        load = Image.open("logo.png")
+        zoom = 0.5
+        pixels_x, pixels_y = tuple([int(zoom * x) for x in load.size])
+
+        render = ImageTk.PhotoImage(load.resize((pixels_x,pixels_y)))
+        self.img = Label(self.master, image=render, bg='cornflowerblue')
+        self.img.image = render
+        self.img.place(x=410, y=50)
         self.label_email = Label(self, text='Email', bg=page_color, font='ComicSansMS 25 bold')
         self.label_password = Label(self, text='Password', bg=page_color, font='ComicSansMS 25 bold')
         self.label_create_acct = Label(self, text='Create Account', fg='blue', font='ComicSansMS', cursor='hand2',
@@ -92,20 +100,27 @@ class UpdateEvent(Frame):
         self.update_entry = Entry(master)
         self.update_entry.pack()
         self.selected = 'na'
+        #self.submit_button = Button(master, text='Submit', font='ComicSansMS 15 bold', fg='lime green',
+         #                           command=lambda i=self.bw(), j=self.update_entry.get(): self.do_update(i, j))
         self.submit_button = Button(master, text='Submit', font='ComicSansMS 15 bold', fg='lime green',
-                                    command=lambda i=self.bw(), j=self.update_entry.get(): self.do_update(i, j))
+                                    command=self.bw())
         self.submit_button.pack()
 
     def bw(self):
         print('bw called')
-        self.variable.trace('w', self.get_sel())
+        print(self.variable.get())
+        self.variable.trace('w', self.option_changed)
+        print(self.variable.get())
+
+    def option_changed(self,*args):
+        return self.variable.get()
 
     def get_sel(self):
         print('returning:' + self.variable.get())
         return self.variable.get()
 
     def do_update(self, arg, new_arg):
-        print('old arg:' + arg + ', new arg:' + new_arg)
+       pass
 
 
 class CreateAccount(Frame):
