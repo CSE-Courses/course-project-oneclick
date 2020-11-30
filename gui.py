@@ -64,6 +64,45 @@ class LoginWindow(Frame):
         app = CreateAccount(self.master)
 
 
+class UpdateInfo(Frame):
+    def __init__(self, master):
+        super().__init__(master)
+
+        self.info_frame = Frame(master, width=150, height=300, bg='DarkGoldenrod1')
+        self.info_label = Label(self.info_frame, text='Password', bg=page_color, font='ComicSansMS 25 bold')
+        self.info_label.pack()
+        self.info_entry = Entry(self.info_frame)
+        self.info_entry.pack()
+        self.info_frame.pack()
+
+
+class UpdateEvent(Frame):
+    def __init__(self, master, email, event_name):
+        super().__init__(master)
+        self.email = email
+        self.event_name = event_name
+
+
+
+
+        OPTIONS = ['event name', 'zoom link', 'description', 'date', 'start time', 'end time']
+        variable = StringVar(master)
+        variable.set(OPTIONS[0])
+        self.dropdown = OptionMenu(master, variable, *OPTIONS, command=self.func)
+        print(variable)
+        self.dropdown.pack()
+        self.update_entry = Entry(self)
+        self.update_entry.pack()
+
+
+
+    def func(self,value):
+        return value
+
+
+
+
+
 class CreateAccount(Frame):
     def __init__(self, master):
         super().__init__(master)
@@ -139,6 +178,14 @@ class MainWindow(Frame):
             self.master.configure(bg='cornflowerblue')
             app = MainWindow(self.master, email)
 
+        def up_event_clicked(event_name):
+            self.master = Tk()
+            self.master.title('Update Event')
+            self.master.geometry('150x300')
+            page_color = 'DarkGoldenrod1'
+            self.master.configure(bg=page_color)
+            new_win = UpdateEvent(self.master,self.email,event_name)
+
         def refresh():
             event_dict = usersDatabase.get_user_events(self.email)
             #   for widget in self.event_frame.winfo_children():
@@ -147,7 +194,6 @@ class MainWindow(Frame):
             # self.event_one_label.pack()
 
             for key in event_dict:
-                print("Here -- inside!")
                 tup = event_dict[key]
                 size = len(tup)
                 date = tup[2].strftime('%m %d %Y')
@@ -158,6 +204,9 @@ class MainWindow(Frame):
                     tup[4])
                 event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=20, pady=20)
                 event.pack()
+                self.update_button = Button(self.event_frame, text='Update Event', bg='hot pink',
+                                            command=lambda i=key: up_event_clicked(i))
+                self.update_button.pack()
                 self.del_button = Button(self.event_frame, text='Delete Event', bg='hot pink',
                                          command=lambda i=key: dynamic_delete(i))
                 self.del_button.pack()

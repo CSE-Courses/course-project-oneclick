@@ -83,7 +83,7 @@ def drop_user_table(email):
     mysql.close()
 
 
-def update_user_table(email,event_name_bool,zoom_link_bool,decription_bool,date_bool,start_time_bool,end_time_bool,update):
+def update_user_event(email,event_name,tuple):
    pass
 
 def delete_user_event(email,event_name):
