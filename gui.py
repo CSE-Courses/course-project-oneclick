@@ -82,25 +82,30 @@ class UpdateEvent(Frame):
         self.email = email
         self.event_name = event_name
 
-
-
-
         OPTIONS = ['event name', 'zoom link', 'description', 'date', 'start time', 'end time']
-        variable = StringVar(master)
-        variable.set(OPTIONS[0])
-        self.dropdown = OptionMenu(master, variable, *OPTIONS, command=self.func)
-        print(variable)
+        self.variable = StringVar(master)
+        self.variable.set(OPTIONS[0])
+        self.dropdown = OptionMenu(master, self.variable, *OPTIONS)
+
+        # print(variable)
         self.dropdown.pack()
-        self.update_entry = Entry(self)
+        self.update_entry = Entry(master)
         self.update_entry.pack()
+        self.selected = 'na'
+        self.submit_button = Button(master, text='Submit', font='ComicSansMS 15 bold', fg='lime green',
+                                    command=lambda i=self.bw(), j=self.update_entry.get(): self.do_update(i, j))
+        self.submit_button.pack()
 
+    def bw(self):
+        print('bw called')
+        self.variable.trace('w', self.get_sel())
 
+    def get_sel(self):
+        print('returning:' + self.variable.get())
+        return self.variable.get()
 
-    def func(self,value):
-        return value
-
-
-
+    def do_update(self, arg, new_arg):
+        print('old arg:' + arg + ', new arg:' + new_arg)
 
 
 class CreateAccount(Frame):
@@ -181,10 +186,10 @@ class MainWindow(Frame):
         def up_event_clicked(event_name):
             self.master = Tk()
             self.master.title('Update Event')
-            self.master.geometry('150x300')
+            self.master.geometry('500x500')
             page_color = 'DarkGoldenrod1'
             self.master.configure(bg=page_color)
-            new_win = UpdateEvent(self.master,self.email,event_name)
+            new_win = UpdateEvent(self.master, self.email, event_name)
 
         def refresh():
             event_dict = usersDatabase.get_user_events(self.email)

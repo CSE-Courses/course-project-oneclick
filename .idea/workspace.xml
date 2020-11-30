@@ -27,7 +27,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4d8cb28d-aa3a-4327-9631-a20dd0f03e7c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/usersDatabase.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/usersDatabase.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -159,22 +158,22 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1419" height="228" key="GridCell.Tab.0.bottom" timestamp="1606705447738">
+    <state width="1419" height="228" key="GridCell.Tab.0.bottom" timestamp="1606707170136">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="228" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1606705447738" />
-    <state width="1419" height="228" key="GridCell.Tab.0.center" timestamp="1606705447737">
+    <state width="1419" height="228" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1606707170136" />
+    <state width="1419" height="228" key="GridCell.Tab.0.center" timestamp="1606707170135">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="228" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1606705447737" />
-    <state width="1419" height="228" key="GridCell.Tab.0.left" timestamp="1606705447737">
+    <state width="1419" height="228" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1606707170135" />
+    <state width="1419" height="228" key="GridCell.Tab.0.left" timestamp="1606707170134">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="228" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1606705447737" />
-    <state width="1419" height="228" key="GridCell.Tab.0.right" timestamp="1606705447738">
+    <state width="1419" height="228" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1606707170134" />
+    <state width="1419" height="228" key="GridCell.Tab.0.right" timestamp="1606707170136">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1419" height="228" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1606705447738" />
+    <state width="1419" height="228" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1606707170136" />
     <state width="1419" height="304" key="GridCell.Tab.1.bottom" timestamp="1606703837490">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
