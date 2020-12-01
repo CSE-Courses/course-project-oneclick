@@ -3,7 +3,7 @@ import re
 from tkcalendar import Calendar
 from database import loginDatabase
 from database import usersDatabase
-from datetime import date
+import datetime
 from datetime import time
 from PIL import Image, ImageTk
 import eventscheduler
@@ -263,17 +263,66 @@ class MainWindow(Frame):
             for key in event_dict:
                 tup = event_dict[key]
                 size = len(tup)
-                date = tup[2].strftime('%m %d %Y')
-                str_date = date.split(' ')
+                dat = tup[2].strftime('%m %d %Y')
+                str_date = dat.split(' ')
                 new_date = str_date[0] + '/' + str_date[1] + '/' + str_date[2]
                 info = key + '\n' + 'Description:' + tup[1] + '\n' + 'Zoom Link:' + tup[
                     0] + '\n' + 'Date:' + new_date + '\n' + 'Start Time:' + str(tup[3]) + '\n' + 'End Time:' + str(
                     tup[4])
                 self.pass_tuple = (key, tup[1], tup[0], tup[2], tup[3], tup[4])
-                event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=20, pady=20)
-                event.pack()
                 option_list = ['event name', 'zoom link', 'description', 'date', 'start time', 'end time']
                 # self.variable = StringVar(self.event_frame)
+                print(type(tup[3]))
+                print(str(tup[3]))
+                def is_completed():
+                    stime_str = str(tup[3]).split(':')
+                    etime_str = str(tup[4]).split(':')
+                    now_str = datetime.datetime.now().strftime('%H %M').split(' ')
+                    d = datetime.date.today()
+                    today_str_date = d.strftime('%m %d %Y').split(' ')
+
+                    print(str_date[2] + ', ' + today_str_date[2])
+
+                    if((int(str_date[1]) == int(today_str_date[1])) and (int(str_date[2]) == int(today_str_date[2])) and (int(str_date[0]) == int(today_str_date[0]))):
+                        if (int(etime_str[0]) < int(now_str[0])):
+                            return 'brown'
+                        if((int(etime_str[1]) < int(now_str[1]) and (int(etime_str[0]) == int(now_str[0])))):
+                            return 'brown'
+                        if (int(stime_str[0]) < int(now_str[0])):
+                            print('yes4')
+                            return 'green'
+                        elif ((int(stime_str[1]) <= int(now_str[1])) and (int(stime_str[0]) == int(now_str[0]))):
+                            print(stime_str[1] + ', ' + now_str[1])
+                            print('yes5')
+                            return 'green'
+                        else:
+                            return 'red'
+                    else:
+                        if(int(str_date[2]) > int(today_str_date[2])):
+                            return 'red'
+                        if(int(str_date[2]) < int(today_str_date[2])):
+                            print('yes1')
+                            return 'green'
+                        elif((int(str_date[0]) < int(today_str_date[0])) and (int(str_date[2]) == int(today_str_date[2]))):
+                            print('yes2')
+                            return 'green'
+                        elif((int(str_date[1]) < int(today_str_date[1])) and (int(str_date[2]) == int(today_str_date[2])) and (int(str_date[0]) == int(today_str_date[0]))):
+                            print('yes3')
+                            return 'green'
+                        else:
+                            return 'red'
+
+
+                self.event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=20, pady=20)
+
+                if (is_completed() == 'green'):
+                    self.event = Label(self.event_frame, text=info, bg='green3', font='bold', padx=20, pady=20)
+                elif (is_completed() == 'brown'):
+                    self.event = Label(self.event_frame, text=info, bg='OrangeRed4', font='bold', padx=20, pady=20)
+                else:
+                    self.event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=20, pady=20)
+
+                self.event.pack()
                 self.variable.set(option_list[0])
                 self.variable.trace("w", self.option)
                 self.update_options = OptionMenu(self.event_frame, self.variable, *option_list)
@@ -434,7 +483,7 @@ class MainWindow(Frame):
 
     def give_date(self, date_str):
         split_date = date_str.split("/")
-        return date(int("20" + split_date[2]), int(split_date[0]), int(split_date[1]))
+        return datetime.date(int("20" + split_date[2]), int(split_date[0]), int(split_date[1]))
 
 
 def check_password(password):
