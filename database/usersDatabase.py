@@ -83,8 +83,16 @@ def drop_user_table(email):
     mysql.close()
 
 
-def update_user_event(email,event_name,tuple):
-   pass
+def update_user_string(email,event_name,attribute,old_string,new_string):
+    new_email = change_email(email)
+    mysqldb = connectToDatabase()
+    cursor = mysqldb.cursor()
+    statement = "UPDATE {} SET {} = '{}' WHERE {} = '{}'".format(new_email, attribute, new_string, attribute, old_string)
+    print(statement)
+    cursor.execute(statement)
+    mysqldb.commit()
+    print(cursor.rowcount, "record(s) affected")
+    mysqldb.close()
 
 def delete_user_event(email,event_name):
 

@@ -7,7 +7,7 @@ from datetime import date
 from datetime import time
 from PIL import Image, ImageTk
 import eventscheduler
-import time
+import threading
 
 
 class LoginWindow(Frame):
@@ -21,7 +21,7 @@ class LoginWindow(Frame):
         zoom = 0.5
         pixels_x, pixels_y = tuple([int(zoom * x) for x in load.size])
 
-        render = ImageTk.PhotoImage(load.resize((pixels_x,pixels_y)))
+        render = ImageTk.PhotoImage(load.resize((pixels_x, pixels_y)))
         self.img = Label(self.master, image=render, bg='cornflowerblue')
         self.img.image = render
         self.img.place(x=410, y=50)
@@ -84,45 +84,6 @@ class UpdateInfo(Frame):
         self.info_frame.pack()
 
 
-class UpdateEvent(Frame):
-    def __init__(self, master, email, event_name):
-        super().__init__(master)
-        self.email = email
-        self.event_name = event_name
-
-        OPTIONS = ['event name', 'zoom link', 'description', 'date', 'start time', 'end time']
-        self.variable = StringVar(master)
-        self.variable.set(OPTIONS[0])
-        self.dropdown = OptionMenu(master, self.variable, *OPTIONS)
-
-        # print(variable)
-        self.dropdown.pack()
-        self.update_entry = Entry(master)
-        self.update_entry.pack()
-        self.selected = 'na'
-        #self.submit_button = Button(master, text='Submit', font='ComicSansMS 15 bold', fg='lime green',
-         #                           command=lambda i=self.bw(), j=self.update_entry.get(): self.do_update(i, j))
-        self.submit_button = Button(master, text='Submit', font='ComicSansMS 15 bold', fg='lime green',
-                                    command=self.bw())
-        self.submit_button.pack()
-
-    def bw(self):
-        print('bw called')
-        print(self.variable.get())
-        self.variable.trace('w', self.option_changed)
-        print(self.variable.get())
-
-    def option_changed(self,*args):
-        return self.variable.get()
-
-    def get_sel(self):
-        print('returning:' + self.variable.get())
-        return self.variable.get()
-
-    def do_update(self, arg, new_arg):
-       pass
-
-
 class CreateAccount(Frame):
     def __init__(self, master):
         super().__init__(master)
@@ -169,6 +130,69 @@ class CreateAccount(Frame):
             self.entry_pass_confirm.delete(0, 'end')
 
 
+class UpdateWindow(Frame):
+    def __init__(self, master, email, event_name, tup, chosen):
+        super().__init__(master)
+        self.email = email
+        self.event_name = event_name
+        self.tup = tup
+        self.chosen = chosen
+
+        self.frame = Frame(master, width=240, height=720, bg='DarkGoldenrod1')
+        self.frame.pack()
+        self.info_entry = Entry(self.frame)
+        self.info_entry.pack()
+        self.submit_button = Button(self.frame, text='Submit', command=self.submit_clicked)
+        self.submit_button.pack()
+
+    def give_date(self, date_str):
+        split_date = date_str.split("/")
+        return date(int("20" + split_date[2]), int(split_date[0]), int(split_date[1]))
+
+    def give_time(self,time_str):
+        split_time = time_str.split(':')
+        hour = int(split_time[0])
+        min = int(split_time[1])
+        return time(hour,min)
+
+    def submit_clicked(self):
+        new_info = self.info_entry.get()
+        #print('email:' + self.email + ', event_name:' + self.event_name + ', new_info:' + new_info + ', chosen:' + self.chosen)
+        if self.chosen == 'event name':
+            new_chosen = 'event_name'
+            usersDatabase.update_user_string(self.email, self.event_name, new_chosen, self.tup[0], new_info)
+        elif self.chosen == 'description':
+            usersDatabase.update_user_string(self.email, self.event_name, self.chosen, self.tup[1], new_info)
+        elif self.chosen == 'zoom link':
+            new_chosen = 'zoom_link'
+            print('zoom link chosen now executing statement')
+            usersDatabase.update_user_string(self.email, self.event_name, new_chosen, self.tup[2], new_info)
+        elif self.chosen == 'date':
+            new_date = self.give_date(new_info).strftime("%Y-%m-%d")
+            new_chosen = 'event_date'
+            usersDatabase.update_user_string(self.email, self.event_name, new_chosen, self.tup[3], new_date)
+        elif self.chosen == 'start time':
+            new_time = self.give_time(new_info)
+            new_chosen = 'start_time'
+            usersDatabase.update_user_string(self.email, self.event_name, new_chosen, self.tup[4], new_time)
+        else:
+            new_time = self.give_time(new_info)
+            new_chosen = 'end_time'
+            usersDatabase.update_user_string(self.email, self.event_name, new_chosen, self.tup[5], new_time)
+
+        self.master.destroy()
+
+
+
+
+
+
+
+
+
+
+
+
 class MainWindow(Frame):
     def __init__(self, master, email):
         super().__init__(master)
@@ -185,6 +209,7 @@ class MainWindow(Frame):
         self.frame.pack(side=LEFT, fill=BOTH)
         self.add_button = Button(self.frame, text='Make Appointment', command=self.create_event)
         self.event_frame = Frame(master, width=240, height=720, bg='yellow')
+        self.variable = StringVar(self.event_frame)
         self.my_events_label = Label(self.event_frame, text="My Events", bg='lightblue', font='bold', padx=1, pady=1)
         # self.event_one_label = Label(self.event_frame, text="Event One", bg='lightpink', font='bold', padx=20, pady=20)
         self.event_frame.pack(side=RIGHT, fill=BOTH)
@@ -198,13 +223,25 @@ class MainWindow(Frame):
             self.master.configure(bg='cornflowerblue')
             app = MainWindow(self.master, email)
 
-        def up_event_clicked(event_name):
+        def up_event_clicked(event_name, tup):
+
+            chosen = self.option()
+            #self.master.destroy()
             self.master = Tk()
-            self.master.title('Update Event')
+            title = 'Enter new ' + chosen
+            if chosen == 'date':
+                title = 'Enter new date in mm/dd/yy format'
+            if chosen == 'start time':
+                title = 'Enter new start time in hh:mm format'
+            if chosen == 'endtime':
+                title = 'Enter new end time in hh:mm format'
+            self.master.title(title)
             self.master.geometry('500x500')
-            page_color = 'DarkGoldenrod1'
-            self.master.configure(bg=page_color)
-            new_win = UpdateEvent(self.master, self.email, event_name)
+            self.master.configure(bg='DarkGoldenrod1')
+            UpdateWindow(self.master, email, event_name, tup, chosen)
+
+
+
 
         def refresh():
             event_dict = usersDatabase.get_user_events(self.email)
@@ -222,17 +259,28 @@ class MainWindow(Frame):
                 info = key + '\n' + 'Description:' + tup[1] + '\n' + 'Zoom Link:' + tup[
                     0] + '\n' + 'Date:' + new_date + '\n' + 'Start Time:' + str(tup[3]) + '\n' + 'End Time:' + str(
                     tup[4])
+                self.pass_tuple = (key, tup[1], tup[0], tup[2], tup[3], tup[4])
                 event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=20, pady=20)
                 event.pack()
-                self.update_button = Button(self.event_frame, text='Update Event', bg='hot pink',
-                                            command=lambda i=key: up_event_clicked(i))
+                option_list = ['event name', 'zoom link', 'description', 'date', 'start time', 'end time']
+                # self.variable = StringVar(self.event_frame)
+                self.variable.set(option_list[0])
+                self.variable.trace("w", self.option)
+                self.update_options = OptionMenu(self.event_frame, self.variable, *option_list)
+                self.update_options.pack()
+                self.update_button = Button(self.event_frame, text='Update', bg='hot pink',
+                                            command=lambda i=key: up_event_clicked(i,self.pass_tuple))
                 self.update_button.pack()
                 self.del_button = Button(self.event_frame, text='Delete Event', bg='hot pink',
                                          command=lambda i=key: dynamic_delete(i))
                 self.del_button.pack()
 
         ref_func = refresh()
+
         self.add_button.pack()
+
+    def option(self, *args):
+        return self.variable.get()
 
     def create_event(self):
 
@@ -330,7 +378,7 @@ class MainWindow(Frame):
 
         usersDatabase.add_user_info(self.email, self.entry_event.get(), self.entry_link.get(),
                                     self.entry_descr.get('1.0', 'end-1c'),
-                                    self.give_date(self.calendar.get_date()), "00", "00")
+                                    self.give_date(self.calendar.get_date()), time(int(self.start_hourstr.get()), int(self.start_minstr.get())), time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
         #                          ,time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
         # time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
         # self.display_event()
