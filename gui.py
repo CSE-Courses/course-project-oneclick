@@ -244,7 +244,7 @@ class MainWindow(Frame):
                 title = 'Enter new date in mm/dd/yy format'
             if chosen == 'start time':
                 title = 'Enter new start time in hh:mm format'
-            if chosen == 'endtime':
+            if chosen == 'end time':
                 title = 'Enter new end time in hh:mm format'
             self.new_root.title(title)
             self.new_root.geometry('500x500')
@@ -313,14 +313,14 @@ class MainWindow(Frame):
                             return 'red'
 
 
-                self.event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=20, pady=20)
+                self.event = Label(self.event_frame, text=info, bg='lightpink', font='ComicSansMS 12 bold', padx=15, pady=20)
 
                 if (is_completed() == 'green'):
-                    self.event = Label(self.event_frame, text=info, bg='green3', font='bold', padx=20, pady=20)
+                    self.event = Label(self.event_frame, text=info, bg='green3', font='ComicSansMS 12 bold', padx=15, pady=20)
                 elif (is_completed() == 'brown'):
-                    self.event = Label(self.event_frame, text=info, bg='OrangeRed4', font='bold', padx=20, pady=20)
+                    self.event = Label(self.event_frame, text=info, bg='OrangeRed4', font='ComicSansMS 12 bold', padx=15, pady=20)
                 else:
-                    self.event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=20, pady=20)
+                    self.event = Label(self.event_frame, text=info, bg='lightpink', font='ComicSansMS 12 bold', padx=15, pady=20)
 
                 self.event.pack()
                 self.variable.set(option_list[0])
