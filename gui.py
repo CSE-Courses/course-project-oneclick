@@ -90,27 +90,46 @@ class CreateAccount(Frame):
 
         # page_color = '#00c6d4'
         page_color = 'DarkGoldenrod1'
+        load = Image.open("logo.png")
+        zoom = 0.5
+        pixels_x, pixels_y = tuple([int(zoom * x) for x in load.size])
+
+        render = ImageTk.PhotoImage(load.resize((pixels_x, pixels_y)))
+        self.main_frame = Frame(self.master, width=240, height=720, bg='DarkGoldenrod1')
+        self.img = Label(self.master, image=render)
+        self.img.image = render
+        self.img.place(x=430, y=50)
+        self.main_frame.pack()
         Frame.configure(self, bg=page_color)
-        self.label_email = Label(self, text='Email', bg=page_color, font='ComicSansMS 25 bold')
-        self.label_password = Label(self, text='Password', bg=page_color, font='ComicSansMS 25 bold')
-        self.label_pass_confirm = Label(self, text='Confirm Password', bg=page_color, font='ComicSansMS 25 bold')
+        self.label_email = Label(self.master, text='Email', bg=page_color, font='ComicSansMS 25 bold')
+        self.label_password = Label(self.master, text='Password', bg=page_color, font='ComicSansMS 25 bold')
+        self.label_pass_confirm = Label(self.master, text='Confirm Password', bg=page_color, font='ComicSansMS 25 bold')
 
-        self.entry_email = Entry(self)
-        self.entry_password = Entry(self, show='*')
-        self.entry_pass_confirm = Entry(self, show='*')
+        self.entry_email = Entry(self.master)
+        self.entry_password = Entry(self.master, show='*')
+        self.entry_pass_confirm = Entry(self.master, show='*')
 
-        self.label_email.grid(row=0, sticky=E)
-        self.label_password.grid(row=1, sticky=E)
-        self.label_pass_confirm.grid(row=2, sticky=E)
-        self.entry_email.grid(row=0, column=1)
-        self.entry_password.grid(row=1, column=1)
-        self.entry_pass_confirm.grid(row=2, column=1)
+        #self.label_email.grid(row=0, sticky=E)
+        #self.label_password.grid(row=1, sticky=E)
+        #self.label_pass_confirm.grid(row=2, sticky=E)
+        #self.entry_email.grid(row=0, column=1)
+        #self.entry_password.grid(row=1, column=1)
+        #self.entry_pass_confirm.grid(row=2, column=1)
+        self.label_email.place(x=360, y=320)
+        self.label_password.place(x=360, y=360)
+        self.label_pass_confirm.place(x=360, y=400)
 
-        self.create_button = Button(self, text='Create Account', bg=page_color, fg='brown', font='ComicSansMS',
+        self.entry_email.place(x=435, y=330)
+        self.entry_password.place(x=480, y=370)
+        self.entry_pass_confirm.place(x=580, y=410)
+
+
+        self.create_button = Button(self.master, text='Create Account', bg=page_color, fg='brown', font='ComicSansMS',
                                     command=self.create_account)
-        self.create_button.grid(columnspan=2)
+        #self.create_button.grid(columnspan=2)
+        self.create_button.place(x=500, y=460)
         self.pack()
-        self.place(x=330, y=330)
+        #self.place(x=330, y=330)
 
     def create_account(self):
         email = self.entry_email.get()
@@ -121,8 +140,9 @@ class CreateAccount(Frame):
             loginDatabase.addUser(email, password)
             self.master.destroy()
             self.master = Tk()
-            self.master.title('Login')
+            self.master.title('Welcome to the OneClick Community!')
             self.master.geometry('1000x1000')
+            self.master.configure(bg='DarkGoldenrod1')
             app = LoginWindow(self.master)
         else:
             self.entry_email.delete(0, 'end')
@@ -133,6 +153,7 @@ class CreateAccount(Frame):
 class UpdateWindow(Frame):
     def __init__(self, master, email, event_name, tup, chosen):
         super().__init__(master)
+        print(threading.current_thread().name)
         self.email = email
         self.event_name = event_name
         self.tup = tup
@@ -149,15 +170,15 @@ class UpdateWindow(Frame):
         split_date = date_str.split("/")
         return date(int("20" + split_date[2]), int(split_date[0]), int(split_date[1]))
 
-    def give_time(self,time_str):
+    def give_time(self, time_str):
         split_time = time_str.split(':')
         hour = int(split_time[0])
         min = int(split_time[1])
-        return time(hour,min)
+        return time(hour, min)
 
     def submit_clicked(self):
         new_info = self.info_entry.get()
-        #print('email:' + self.email + ', event_name:' + self.event_name + ', new_info:' + new_info + ', chosen:' + self.chosen)
+        # print('email:' + self.email + ', event_name:' + self.event_name + ', new_info:' + new_info + ', chosen:' + self.chosen)
         if self.chosen == 'event name':
             new_chosen = 'event_name'
             usersDatabase.update_user_string(self.email, self.event_name, new_chosen, self.tup[0], new_info)
@@ -181,16 +202,6 @@ class UpdateWindow(Frame):
             usersDatabase.update_user_string(self.email, self.event_name, new_chosen, self.tup[5], new_time)
 
         self.master.destroy()
-
-
-
-
-
-
-
-
-
-
 
 
 class MainWindow(Frame):
@@ -226,8 +237,8 @@ class MainWindow(Frame):
         def up_event_clicked(event_name, tup):
 
             chosen = self.option()
-            #self.master.destroy()
-            self.master = Tk()
+            # self.master.destroy()
+            self.new_root = Tk()
             title = 'Enter new ' + chosen
             if chosen == 'date':
                 title = 'Enter new date in mm/dd/yy format'
@@ -235,11 +246,10 @@ class MainWindow(Frame):
                 title = 'Enter new start time in hh:mm format'
             if chosen == 'endtime':
                 title = 'Enter new end time in hh:mm format'
-            self.master.title(title)
-            self.master.geometry('500x500')
-            self.master.configure(bg='DarkGoldenrod1')
-            UpdateWindow(self.master, email, event_name, tup, chosen)
-
+            self.new_root.title(title)
+            self.new_root.geometry('500x500')
+            self.new_root.configure(bg='DarkGoldenrod1')
+            UpdateWindow(self.new_root, email, event_name, tup, chosen)
 
 
 
@@ -269,7 +279,7 @@ class MainWindow(Frame):
                 self.update_options = OptionMenu(self.event_frame, self.variable, *option_list)
                 self.update_options.pack()
                 self.update_button = Button(self.event_frame, text='Update', bg='hot pink',
-                                            command=lambda i=key: up_event_clicked(i,self.pass_tuple))
+                                            command=lambda i=key: up_event_clicked(i, self.pass_tuple))
                 self.update_button.pack()
                 self.del_button = Button(self.event_frame, text='Delete Event', bg='hot pink',
                                          command=lambda i=key: dynamic_delete(i))
@@ -378,7 +388,9 @@ class MainWindow(Frame):
 
         usersDatabase.add_user_info(self.email, self.entry_event.get(), self.entry_link.get(),
                                     self.entry_descr.get('1.0', 'end-1c'),
-                                    self.give_date(self.calendar.get_date()), time(int(self.start_hourstr.get()), int(self.start_minstr.get())), time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
+                                    self.give_date(self.calendar.get_date()),
+                                    time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
+                                    time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
         #                          ,time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
         # time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
         # self.display_event()
