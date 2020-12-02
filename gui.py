@@ -168,7 +168,7 @@ class UpdateWindow(Frame):
 
     def give_date(self, date_str):
         split_date = date_str.split("/")
-        return date(int("20" + split_date[2]), int(split_date[0]), int(split_date[1]))
+        return datetime.date(int("20" + split_date[2]), int(split_date[0]), int(split_date[1]))
 
     def give_time(self, time_str):
         split_time = time_str.split(':')
@@ -297,6 +297,14 @@ class MainWindow(Frame):
                             return 'green'
                         else:
                             return 'red'
+
+                    elif(int(str_date[2]) < int(today_str_date[2])):
+                        return 'brown'
+                    elif((int(str_date[2]) == int(today_str_date[2])) and (int(str_date[0]) < int(today_str_date[0]))):
+                        return 'brown'
+                    elif((int(str_date[2]) == int(today_str_date[2])) and (int(str_date[0]) == int(today_str_date[0])) and (int(str_date[1]) < int(today_str_date[1]))):
+                        return 'brown'
+
                     else:
                         if(int(str_date[2]) > int(today_str_date[2])):
                             return 'red'
@@ -313,14 +321,14 @@ class MainWindow(Frame):
                             return 'red'
 
 
-                self.event = Label(self.event_frame, text=info, bg='lightpink', font='ComicSansMS 12 bold', padx=15, pady=20)
+                self.event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=15, pady=20)
 
                 if (is_completed() == 'green'):
-                    self.event = Label(self.event_frame, text=info, bg='green3', font='ComicSansMS 12 bold', padx=15, pady=20)
+                    self.event = Label(self.event_frame, text=info, bg='green3', font='bold', padx=15, pady=20)
                 elif (is_completed() == 'brown'):
-                    self.event = Label(self.event_frame, text=info, bg='OrangeRed4', font='ComicSansMS 12 bold', padx=15, pady=20)
+                    self.event = Label(self.event_frame, text=info, bg='OrangeRed4', font='bold', padx=15, pady=20)
                 else:
-                    self.event = Label(self.event_frame, text=info, bg='lightpink', font='ComicSansMS 12 bold', padx=15, pady=20)
+                    self.event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=15, pady=20)
 
                 self.event.pack()
                 self.variable.set(option_list[0])
