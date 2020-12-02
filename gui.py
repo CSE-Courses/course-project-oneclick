@@ -378,8 +378,8 @@ class MainWindow(Frame):
         self.label_link.pack(padx=20)
         self.entry_link.pack(padx=20)
 
-        self.start_label = Label(self.frame, text='Start Time: ', font='veranda 14 bold',  fg='midnight blue')
-        self.start_label.pack(side=LEFT, padx=(20, 0))
+        self.start_label = Label(self.frame, text='Start Time: ', bg='DarkGoldenrod1', font='veranda 14 bold',  fg='midnight blue')
+        self.start_label.place(x=20, y=450)
         self.start_hourstr = StringVar(self.frame, '10')
         self.start_hour = Spinbox(self.frame, font='veranda 14 bold',  fg='midnight blue',  from_=0, to=23, wrap=True, textvariable=self.start_hourstr, width=2,
                                   state="readonly")
@@ -388,11 +388,11 @@ class MainWindow(Frame):
         self.start_last_value = ""
         self.start_min = Spinbox(self.frame, font='veranda 14 bold',  fg='midnight blue',  from_=0, to=59, wrap=True, textvariable=self.start_minstr, width=2,
                                  state="readonly")
-        self.start_hour.pack(side=LEFT)
-        self.start_min.pack(side=LEFT, padx=(0, 20))
+        self.start_hour.place(x=133,y=450)
+        self.start_min.place(x=173, y=450)
 
-        self.end_label = Label(self.frame, text='End Time: ', font='veranda 14 bold',  fg='midnight blue')
-        self.end_label.pack(side=LEFT)
+        self.end_label = Label(self.frame, text='End Time: ', bg='DarkGoldenrod1', font='veranda 14 bold',  fg='midnight blue')
+        self.end_label.place(x=220, y=450)
         self.end_hourstr = StringVar(self.frame, '10')
         self.end_hour = Spinbox(self.frame, font='veranda 14 bold',  fg='midnight blue', from_=0, to=23, wrap=True, textvariable=self.end_hourstr, width=2,
                                 state="readonly")
@@ -401,8 +401,8 @@ class MainWindow(Frame):
         self.end_last_value = ""
         self.end_min = Spinbox(self.frame, font='veranda 14 bold',  fg='midnight blue', from_=0, to=59, wrap=True, textvariable=self.end_minstr, width=2,
                                state="readonly")
-        self.end_hour.pack(side=LEFT)
-        self.end_min.pack(side=LEFT)
+        self.end_hour.place(x=326, y=450)
+        self.end_min.place(x=366, y=450)
 
         def time_date_str(hour, minute):
             min_str = lambda min: "0" + min if int(min) < 10 else min
@@ -423,9 +423,7 @@ class MainWindow(Frame):
             self.submit_event()
 
         self.submit_btn = Button(self.frame, text='Submit', font ='veranda 14 bold',  fg='midnight blue', command=run)
-        self.recur_check = Checkbutton(self.frame, text='Recurring Meeting', font='veranda 14 bold',  fg='midnight blue', command=self.recurring)
-        self.recur_check.pack()
-        self.submit_btn.pack()
+        self.submit_btn.place(x=175, y=490)
 
     def trace_var(self, *args):
         if self.start_last_value == "59" and self.start_minstr.get() == "0":
