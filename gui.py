@@ -349,15 +349,28 @@ class MainWindow(Frame):
 
         ref_func = refresh()
 
+        self.logout_button = Button(self.frame, text='Logout', font='verdana 16 bold',  fg='midnight blue', command=self.logout)
         self.add_button.pack()
+        self.logout_button.pack()
 
     def option(self, *args):
         return self.variable.get()
+
+    def logout(self):
+        self.master.destroy()
+        new_root = Tk()
+        new_root.title('OneClick - Login')
+        new_root.configure(bg='DarkGoldenrod1')
+        new_root.geometry('1000x1000')
+        lw = LoginWindow(new_root)
+        new_root.mainloop()
 
     def create_event(self):
 
         # TODO: use grid and create spacing between widgets in self.frame, also place submit button in the bottom-middle
 
+        self.logout_button.destroy()
+        self.new_logout_button = Button(self.frame, text='Logout', font='verdana 14 bold',  fg='midnight blue', command=self.logout)
         self.add_button.pack_forget()
         self.calendar = Calendar(self.frame, font='Arial 14', bg='midnight blue', fg='midnight blue', cursor='dotbox', selectmode='day',
                                  showothermonthdays=False, showweeknumbers=False, firstweekday='sunday')
@@ -424,6 +437,7 @@ class MainWindow(Frame):
 
         self.submit_btn = Button(self.frame, text='Submit', font ='veranda 14 bold',  fg='midnight blue', command=run)
         self.submit_btn.place(x=175, y=490)
+        self.new_logout_button.place(x=0, y=0)
 
     def trace_var(self, *args):
         if self.start_last_value == "59" and self.start_minstr.get() == "0":
@@ -464,20 +478,21 @@ class MainWindow(Frame):
         self.entry_event.destroy()
         self.entry_descr.destroy()
         self.entry_link.destroy()
+        self.recur_check.destroy()
         self.submit_btn.destroy()
         self.start_hour.destroy()
         self.start_min.destroy()
         self.end_hour.destroy()
         self.end_min.destroy()
-        self.start_label.destroy()
-        self.end_label.destroy()
+        self.start_label.pack_forget()
+        self.end_label.pack_forget()
         self.add_button.pack()
-        self.master.destroy()
-        self.master = Tk()
-        self.master.title('OneClick')
-        self.master.geometry('1280x720')
-        self.master.configure(bg='midnight blue')
-        app = MainWindow(self.master, self.email)
+        #self.master.destroy()
+        #self.master = Tk()
+        #self.master.title('OneClick')
+        #self.master.geometry('1280x720')
+        #self.master.configure(bg='midnight blue')
+        #app = MainWindow(self.master, self.email)
 
     def display_event(self):
         self.r_frame = Frame(self, bg='lightblue').pack(side=RIGHT)
