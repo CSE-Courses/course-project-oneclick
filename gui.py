@@ -22,7 +22,7 @@ class LoginWindow(Frame):
         pixels_x, pixels_y = tuple([int(zoom * x) for x in load.size])
 
         render = ImageTk.PhotoImage(load.resize((pixels_x, pixels_y)))
-        self.img = Label(self.master, image=render, bg='cornflowerblue')
+        self.img = Label(self.master, image=render, bg='midnight blue')
         self.img.image = render
         self.img.place(x=410, y=50)
         self.label_email = Label(self, text='Email', bg=page_color, font='ComicSansMS 25 bold')
@@ -57,7 +57,7 @@ class LoginWindow(Frame):
             self.master = Tk()
             self.master.title('OneClick')
             self.master.geometry('1280x720')
-            self.master.configure(bg='cornflowerblue')
+            self.master.configure(bg='midnight blue')
             app = MainWindow(self.master, email)
         print(email)
         print(password)
@@ -212,16 +212,16 @@ class MainWindow(Frame):
 
         load = Image.open("oneclicklogo.png")
         render = ImageTk.PhotoImage(load)
-        self.img = Label(self.master, image=render, bg='cornflowerblue')
+        self.img = Label(self.master, image=render, bg='midnight blue')
         self.img.image = render
-        self.img.place(x=350, y=40)
+        self.img.place(x=300, y=40)
 
-        self.frame = Frame(master, width=240, height=720, bg='lightcoral')
+        self.frame = Frame(master, width=240, height=720, bg='DarkGoldenrod1')
         self.frame.pack(side=LEFT, fill=BOTH)
-        self.add_button = Button(self.frame, text='Make Appointment', command=self.create_event)
-        self.event_frame = Frame(master, width=240, height=720, bg='yellow')
+        self.add_button = Button(self.frame, text='Make Appointment', font='verdana 16 bold',  fg='midnight blue', command=self.create_event)
+        self.event_frame = Frame(master, width=240, height=720, bg='DarkGoldenrod1')
         self.variable = StringVar(self.event_frame)
-        self.my_events_label = Label(self.event_frame, text="My Events", bg='lightblue', font='bold', padx=1, pady=1)
+        self.my_events_label = Label(self.event_frame, text="My Events", bg='lightblue', font='verdana 16 bold', padx=1, pady=1)
         # self.event_one_label = Label(self.event_frame, text="Event One", bg='lightpink', font='bold', padx=20, pady=20)
         self.event_frame.pack(side=RIGHT, fill=BOTH)
 
@@ -231,7 +231,7 @@ class MainWindow(Frame):
             self.master = Tk()
             self.master.title('OneClick')
             self.master.geometry('1280x720')
-            self.master.configure(bg='cornflowerblue')
+            self.master.configure(bg='midnight blue')
             app = MainWindow(self.master, email)
 
         def up_event_clicked(event_name, tup):
@@ -324,21 +324,21 @@ class MainWindow(Frame):
                 self.event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=15, pady=20)
 
                 if (is_completed() == 'green'):
-                    self.event = Label(self.event_frame, text=info, bg='green3', font='bold', padx=15, pady=20)
+                    self.event = Label(self.event_frame, text=info, bg='green3', font='verdana 12', padx=15, pady=20)
                 elif (is_completed() == 'brown'):
-                    self.event = Label(self.event_frame, text=info, bg='OrangeRed4', font='bold', padx=15, pady=20)
+                    self.event = Label(self.event_frame, text=info, bg='OrangeRed4', font='verdana 12', padx=15, pady=20)
                 else:
-                    self.event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=15, pady=20)
+                    self.event = Label(self.event_frame, text=info, bg='lightpink', font='verdana 12', padx=15, pady=20)
 
                 self.event.pack()
                 self.variable.set(option_list[0])
                 self.variable.trace("w", self.option)
                 self.update_options = OptionMenu(self.event_frame, self.variable, *option_list)
                 self.update_options.pack()
-                self.update_button = Button(self.event_frame, text='Update', bg='hot pink',
+                self.update_button = Button(self.event_frame, text='Update', font='veranda 14 bold', fg='midnight blue',
                                             command=lambda i=key: up_event_clicked(i, self.pass_tuple))
                 self.update_button.pack()
-                self.del_button = Button(self.event_frame, text='Delete Event', bg='hot pink',
+                self.del_button = Button(self.event_frame, text='Delete Event', font='veranda 14 bold',  fg='midnight blue',
                                          command=lambda i=key: dynamic_delete(i))
                 self.del_button.pack()
 
@@ -354,10 +354,10 @@ class MainWindow(Frame):
         self.add_button.pack_forget()
         self.calendar = Calendar(self.frame, font='Arial 14', cursor='dotbox', selectmode='day',
                                  showothermonthdays=False, showweeknumbers=False, firstweekday='sunday')
-        self.label_event = Label(self.frame, text='Event Name')
-        self.label_descr = Label(self.frame, text='Description')
-        self.label_command = Label(self.frame, text='Application Selection')
-        self.label_link = Label(self.frame, text='Zoom Link')
+        self.label_event = Label(self.frame, text='Event Name', font='veranda 14 bold', bg='DarkGoldenrod1',  fg='midnight blue')
+        self.label_descr = Label(self.frame, text='Description', font='veranda 14 bold', bg='DarkGoldenrod1',  fg='midnight blue')
+        self.label_command = Label(self.frame, text='Application Selection', font='veranda 14 bold', bg='DarkGoldenrod1',  fg='midnight blue')
+        self.label_link = Label(self.frame, text='Zoom Link', font='veranda 14 bold', bg='DarkGoldenrod1',  fg='midnight blue')
 
         self.entry_event = Entry(self.frame, width=64)
         self.entry_descr = Text(self.frame, width=48, height=5)
@@ -371,28 +371,28 @@ class MainWindow(Frame):
         self.label_link.pack(padx=20)
         self.entry_link.pack(padx=20)
 
-        self.start_label = Label(self.frame, text='Start Time: ')
+        self.start_label = Label(self.frame, text='Start Time: ', font='veranda 14 bold',  fg='midnight blue')
         self.start_label.pack(side=LEFT, padx=(20, 0))
         self.start_hourstr = StringVar(self.frame, '10')
-        self.start_hour = Spinbox(self.frame, from_=0, to=23, wrap=True, textvariable=self.start_hourstr, width=2,
+        self.start_hour = Spinbox(self.frame, font='veranda 14 bold',  fg='midnight blue',  from_=0, to=23, wrap=True, textvariable=self.start_hourstr, width=2,
                                   state="readonly")
         self.start_minstr = StringVar(self.frame, '30')
         self.start_minstr.trace("w", self.trace_var)
         self.start_last_value = ""
-        self.start_min = Spinbox(self.frame, from_=0, to=59, wrap=True, textvariable=self.start_minstr, width=2,
+        self.start_min = Spinbox(self.frame, font='veranda 14 bold',  fg='midnight blue',  from_=0, to=59, wrap=True, textvariable=self.start_minstr, width=2,
                                  state="readonly")
         self.start_hour.pack(side=LEFT)
         self.start_min.pack(side=LEFT, padx=(0, 20))
 
-        self.end_label = Label(self.frame, text='End Time: ')
+        self.end_label = Label(self.frame, text='End Time: ', font='veranda 14 bold',  fg='midnight blue')
         self.end_label.pack(side=LEFT)
         self.end_hourstr = StringVar(self.frame, '10')
-        self.end_hour = Spinbox(self.frame, from_=0, to=23, wrap=True, textvariable=self.end_hourstr, width=2,
+        self.end_hour = Spinbox(self.frame, font='veranda 14 bold',  fg='midnight blue', from_=0, to=23, wrap=True, textvariable=self.end_hourstr, width=2,
                                 state="readonly")
         self.end_minstr = StringVar(self.frame, '30')
         self.end_minstr.trace("w", self.trace_var)
         self.end_last_value = ""
-        self.end_min = Spinbox(self.frame, from_=0, to=59, wrap=True, textvariable=self.end_minstr, width=2,
+        self.end_min = Spinbox(self.frame, font='veranda 14 bold',  fg='midnight blue', from_=0, to=59, wrap=True, textvariable=self.end_minstr, width=2,
                                state="readonly")
         self.end_hour.pack(side=LEFT)
         self.end_min.pack(side=LEFT)
@@ -415,8 +415,8 @@ class MainWindow(Frame):
             )
             self.submit_event()
 
-        self.submit_btn = Button(self.frame, text='Submit', command=run)
-        self.recur_check = Checkbutton(self.frame, text='Recurring Meeting', command=self.recurring)
+        self.submit_btn = Button(self.frame, text='Submit', font ='veranda 14 bold',  fg='midnight blue', command=run)
+        self.recur_check = Checkbutton(self.frame, text='Recurring Meeting', font='veranda 14 bold',  fg='midnight blue', command=self.recurring)
         self.recur_check.pack()
         self.submit_btn.pack()
 
