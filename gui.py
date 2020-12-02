@@ -472,6 +472,12 @@ class MainWindow(Frame):
         self.start_label.destroy()
         self.end_label.destroy()
         self.add_button.pack()
+        self.master.destroy()
+        self.master = Tk()
+        self.master.title('OneClick')
+        self.master.geometry('1280x720')
+        self.master.configure(bg='midnight blue')
+        app = MainWindow(self.master, self.email)
 
     def display_event(self):
         self.r_frame = Frame(self, bg='lightblue').pack(side=RIGHT)
