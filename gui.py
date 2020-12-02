@@ -464,14 +464,13 @@ class MainWindow(Frame):
         self.entry_event.destroy()
         self.entry_descr.destroy()
         self.entry_link.destroy()
-        self.recur_check.destroy()
         self.submit_btn.destroy()
         self.start_hour.destroy()
         self.start_min.destroy()
         self.end_hour.destroy()
         self.end_min.destroy()
-        self.start_label.pack_forget()
-        self.end_label.pack_forget()
+        self.start_label.destroy()
+        self.end_label.destroy()
         self.add_button.pack()
 
     def display_event(self):
