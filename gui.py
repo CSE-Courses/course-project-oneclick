@@ -184,20 +184,24 @@ class UpdateWindow(Frame):
     def submit_clicked(self):
         new_info = self.info_entry.get()
         # print('email:' + self.email + ', event_name:' + self.event_name + ', new_info:' + new_info + ', chosen:' + self.chosen)
-        if self.chosen == 'event name':
+        if self.chosen == 'Event Name':
             new_chosen = 'event_name'
             usersDatabase.update_user_string(self.email, self.event_name, new_chosen, self.tup[0], new_info)
-        elif self.chosen == 'description':
+        elif self.chosen == 'Description':
             usersDatabase.update_user_string(self.email, self.event_name, self.chosen, self.tup[1], new_info)
-        elif self.chosen == 'zoom link':
+        elif self.chosen == 'Zoom Link':
             new_chosen = 'zoom_link'
             print('zoom link chosen now executing statement')
             usersDatabase.update_user_string(self.email, self.event_name, new_chosen, self.tup[2], new_info)
-        elif self.chosen == 'date':
+        elif self.chosen == 'Date':
             new_date = self.give_date(new_info).strftime("%Y-%m-%d")
+            print('here')
             new_chosen = 'event_date'
+            #print('new date:' + new_date)
+            #print('old date:' + self.tup[3].strftime("%m %d %Y"))
+            #print(self.email + ', ' + self.event_name + ', ' + new_chosen)
             usersDatabase.update_user_string(self.email, self.event_name, new_chosen, self.tup[3], new_date)
-        elif self.chosen == 'start time':
+        elif self.chosen == 'Start Time':
             new_time = self.give_time(new_info)
             new_chosen = 'start_time'
             usersDatabase.update_user_string(self.email, self.event_name, new_chosen, self.tup[4], new_time)
