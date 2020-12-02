@@ -240,11 +240,11 @@ class MainWindow(Frame):
             # self.master.destroy()
             self.new_root = Tk()
             title = 'Enter new ' + chosen
-            if chosen == 'date':
+            if chosen == 'Date':
                 title = 'Enter new date in mm/dd/yy format'
-            if chosen == 'start time':
+            if chosen == 'Start Time':
                 title = 'Enter new start time in hh:mm format'
-            if chosen == 'end time':
+            if chosen == 'End Time':
                 title = 'Enter new end time in hh:mm format'
             self.new_root.title(title)
             self.new_root.geometry('500x500')
@@ -270,7 +270,7 @@ class MainWindow(Frame):
                     0] + '\n' + 'Date:' + new_date + '\n' + 'Start Time:' + str(tup[3]) + '\n' + 'End Time:' + str(
                     tup[4])
                 self.pass_tuple = (key, tup[1], tup[0], tup[2], tup[3], tup[4])
-                option_list = ['event name', 'zoom link', 'description', 'date', 'start time', 'end time']
+                option_list = ['Event Name', 'Zoom Link', 'Description', 'Date', 'Start Time', 'End Time']
                 # self.variable = StringVar(self.event_frame)
                 print(type(tup[3]))
                 print(str(tup[3]))
@@ -326,9 +326,9 @@ class MainWindow(Frame):
                 if (is_completed() == 'green'):
                     self.event = Label(self.event_frame, text=info, bg='green3', font='verdana 12', padx=15, pady=20)
                 elif (is_completed() == 'brown'):
-                    self.event = Label(self.event_frame, text=info, bg='OrangeRed4', font='verdana 12', padx=15, pady=20)
+                    self.event = Label(self.event_frame, text=info, bg='light pink', font='verdana 12', padx=15, pady=20)
                 else:
-                    self.event = Label(self.event_frame, text=info, bg='lightpink', font='verdana 12', padx=15, pady=20)
+                    self.event = Label(self.event_frame, text=info, bg='MediumOrchid1', font='verdana 12', padx=15, pady=20)
 
                 self.event.pack()
                 self.variable.set(option_list[0])
@@ -338,7 +338,7 @@ class MainWindow(Frame):
                 self.update_button = Button(self.event_frame, text='Update', font='veranda 14 bold', fg='midnight blue',
                                             command=lambda i=key: up_event_clicked(i, self.pass_tuple))
                 self.update_button.pack()
-                self.del_button = Button(self.event_frame, text='Delete Event', font='veranda 14 bold',  fg='midnight blue',
+                self.del_button = Button(self.event_frame, text='Delete', font='veranda 14 bold',  fg='midnight blue',
                                          command=lambda i=key: dynamic_delete(i))
                 self.del_button.pack()
 
@@ -351,8 +351,10 @@ class MainWindow(Frame):
 
     def create_event(self):
 
+        # TODO: use grid and create spacing between widgets in self.frame, also place submit button in the bottom-middle
+
         self.add_button.pack_forget()
-        self.calendar = Calendar(self.frame, font='Arial 14', cursor='dotbox', selectmode='day',
+        self.calendar = Calendar(self.frame, font='Arial 14', bg='midnight blue', fg='midnight blue', cursor='dotbox', selectmode='day',
                                  showothermonthdays=False, showweeknumbers=False, firstweekday='sunday')
         self.label_event = Label(self.frame, text='Event Name', font='veranda 14 bold', bg='DarkGoldenrod1',  fg='midnight blue')
         self.label_descr = Label(self.frame, text='Description', font='veranda 14 bold', bg='DarkGoldenrod1',  fg='midnight blue')
