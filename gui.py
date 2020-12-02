@@ -22,7 +22,7 @@ class LoginWindow(Frame):
         pixels_x, pixels_y = tuple([int(zoom * x) for x in load.size])
 
         render = ImageTk.PhotoImage(load.resize((pixels_x, pixels_y)))
-        self.img = Label(self.master, image=render, bg='midnight blue')
+        self.img = Label(self.master, image=render, bg='DarkGoldenrod1')
         self.img.image = render
         self.img.place(x=410, y=50)
         self.label_email = Label(self, text='Email', bg=page_color, font='ComicSansMS 25 bold')
@@ -41,8 +41,8 @@ class LoginWindow(Frame):
 
         self.login_button = Button(self, text='Login', font='ComicSansMS 15 bold', fg='lime green',
                                    command=self.login_clicked)
-        self.login_button.grid(columnspan=2)
-        self.label_create_acct.grid(columnspan=2)
+        self.login_button.grid(columnspan=4)
+        self.label_create_acct.grid(columnspan=4)
         loginDatabase.create_users_table()
 
         self.pack()
@@ -126,11 +126,21 @@ class CreateAccount(Frame):
 
         self.create_button = Button(self.master, text='Create Account', bg=page_color, fg='brown', font='ComicSansMS',
                                     command=self.create_account)
+        self.cancel_button = Button(self.master, text='Cancel',bg=page_color, fg='brown', font='ComicSansMS', command=self.create_cancel)
+        self.cancel_button.place(x=400, y=460)
         #self.create_button.grid(columnspan=2)
         self.create_button.place(x=500, y=460)
         self.pack()
         #self.place(x=330, y=330)
 
+    def create_cancel(self):
+        self.master.destroy()
+        self.master = Tk()
+        self.master.title('Welcome to the OneClick Community!')
+        self.master.geometry('1000x1000')
+        self.master.configure(bg='DarkGoldenrod1')
+        app = LoginWindow(self.master)
+        
     def create_account(self):
         email = self.entry_email.get()
         password = self.entry_password.get()
@@ -138,12 +148,7 @@ class CreateAccount(Frame):
         if check_email(email) and check_password(password) and check_confirm_pass(pass_confirm, password):
             # Confirm account has been created in database
             loginDatabase.addUser(email, password)
-            self.master.destroy()
-            self.master = Tk()
-            self.master.title('Welcome to the OneClick Community!')
-            self.master.geometry('1000x1000')
-            self.master.configure(bg='DarkGoldenrod1')
-            app = LoginWindow(self.master)
+            self.create_cancel()
         else:
             self.entry_email.delete(0, 'end')
             self.entry_password.delete(0, 'end')
