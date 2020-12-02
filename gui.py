@@ -471,32 +471,12 @@ class MainWindow(Frame):
                                     self.give_date(self.calendar.get_date()),
                                     time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
                                     time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
-        #                          ,time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
-        # time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
-        # self.display_event()
-        self.calendar.destroy()
-
-        self.label_event.destroy()
-        self.label_descr.destroy()
-        self.label_link.destroy()
-        self.entry_event.destroy()
-        self.entry_descr.destroy()
-        self.entry_link.destroy()
-        self.recur_check.destroy()
-        self.submit_btn.destroy()
-        self.start_hour.destroy()
-        self.start_min.destroy()
-        self.end_hour.destroy()
-        self.end_min.destroy()
-        self.start_label.pack_forget()
-        self.end_label.pack_forget()
-        self.add_button.pack()
-        #self.master.destroy()
-        #self.master = Tk()
-        #self.master.title('OneClick')
-        #self.master.geometry('1280x720')
-        #self.master.configure(bg='midnight blue')
-        #app = MainWindow(self.master, self.email)
+        self.master.destroy()
+        self.master = Tk()
+        self.master.title('OneClick')
+        self.master.geometry('1280x720')
+        self.master.configure(bg='midnight blue')
+        app = MainWindow(self.master, self.email)
 
     def display_event(self):
         self.r_frame = Frame(self, bg='lightblue').pack(side=RIGHT)
