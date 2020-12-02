@@ -126,11 +126,21 @@ class CreateAccount(Frame):
 
         self.create_button = Button(self.master, text='Create Account', bg=page_color, fg='brown', font='ComicSansMS',
                                     command=self.create_account)
+        self.cancel_button = Button(self.master, text='Cancel', command=self.create_cancel)
+        self.cancel_button.place(x=400, y=460)
         #self.create_button.grid(columnspan=2)
         self.create_button.place(x=500, y=460)
         self.pack()
         #self.place(x=330, y=330)
 
+    def create_cancel(self):
+        self.master.destroy()
+        self.master = Tk()
+        self.master.title('Welcome to the OneClick Community!')
+        self.master.geometry('1000x1000')
+        self.master.configure(bg='DarkGoldenrod1')
+        app = LoginWindow(self.master)
+        
     def create_account(self):
         email = self.entry_email.get()
         password = self.entry_password.get()
@@ -138,12 +148,7 @@ class CreateAccount(Frame):
         if check_email(email) and check_password(password) and check_confirm_pass(pass_confirm, password):
             # Confirm account has been created in database
             loginDatabase.addUser(email, password)
-            self.master.destroy()
-            self.master = Tk()
-            self.master.title('Welcome to the OneClick Community!')
-            self.master.geometry('1000x1000')
-            self.master.configure(bg='DarkGoldenrod1')
-            app = LoginWindow(self.master)
+            create_cancel(self)
         else:
             self.entry_email.delete(0, 'end')
             self.entry_password.delete(0, 'end')
