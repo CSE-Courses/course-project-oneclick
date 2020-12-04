@@ -31,6 +31,9 @@ class LoginWindow(Frame):
         self.label_create_acct = Label(self, text='Create Account', fg='blue', font='ComicSansMS', cursor='hand2',
                                        bg=page_color)
         self.label_create_acct.bind('<Button-1>', lambda e: self.create_clicked())
+        self.label_delete_acct = Label(self, text='Delete Account', fg='blue', font='ComicSansMS', cursor='hand2',
+                                       bg=page_color)
+        self.label_delete_acct.bind('<Button-1>', lambda e: self.delete_clicked())
 
         self.entry_email = Entry(self)
         self.entry_password = Entry(self, show='*')
@@ -44,6 +47,7 @@ class LoginWindow(Frame):
                                    command=self.login_clicked)
         self.login_button.grid(columnspan=4)
         self.label_create_acct.grid(columnspan=4)
+        self.label_delete_acct.grid(columnspan=4)
         loginDatabase.create_users_table()
 
         self.pack()
@@ -72,17 +76,91 @@ class LoginWindow(Frame):
         self.master.configure(bg='DarkGoldenrod1')
         app = CreateAccount(self.master)
 
+    def delete_clicked(self):
+        email = self.entry_email.get()
+        password = self.entry_password.get()
+        self.master.destroy()
+        self.master = Tk()
+        self.master.title('Delete Account')
+        self.master.geometry('1000x1000')
+        page_color = '#00c6d4'
+        self.master.configure(bg='DarkGoldenrod1')
+        app = DeleteAccount(self.master)
 
-class UpdateInfo(Frame):
+
+class DeleteAccount(Frame):
     def __init__(self, master):
         super().__init__(master)
+        page_color = 'DarkGoldenrod1'
+        load = Image.open("logo.png")
+        zoom = 0.5
+        pixels_x, pixels_y = tuple([int(zoom * x) for x in load.size])
 
-        self.info_frame = Frame(master, width=150, height=300, bg='DarkGoldenrod1')
-        self.info_label = Label(self.info_frame, text='Password', bg=page_color, font='ComicSansMS 25 bold')
-        self.info_label.pack()
-        self.info_entry = Entry(self.info_frame)
-        self.info_entry.pack()
-        self.info_frame.pack()
+        render = ImageTk.PhotoImage(load.resize((pixels_x, pixels_y)))
+        self.main_frame = Frame(self.master, width=240, height=720, bg='DarkGoldenrod1')
+        self.img = Label(self.master, image=render)
+        self.img.image = render
+        self.img.place(x=430, y=50)
+        self.main_frame.pack()
+        Frame.configure(self, bg=page_color)
+        self.label_email = Label(self.master, text='Email', bg=page_color, font='ComicSansMS 25 bold')
+        self.label_password = Label(self.master, text='Password', bg=page_color, font='ComicSansMS 25 bold')
+        self.label_pass_confirm = Label(self.master, text='Confirm Password', bg=page_color, font='ComicSansMS 25 bold')
+
+        self.entry_email = Entry(self.master)
+        self.entry_password = Entry(self.master, show='*')
+        self.entry_pass_confirm = Entry(self.master, show='*')
+        self.label_email.place(x=360, y=320)
+        self.label_password.place(x=360, y=360)
+        self.label_pass_confirm.place(x=360, y=400)
+
+        self.entry_email.place(x=435, y=330)
+        self.entry_password.place(x=480, y=370)
+        self.entry_pass_confirm.place(x=580, y=410)
+
+        self.create_button = Button(self.master, text='Delete Account', bg=page_color, fg='brown', font='ComicSansMS',
+                                    command=self.delete_account)
+        self.cancel_button = Button(self.master, text='Cancel', bg=page_color, fg='brown', font='ComicSansMS',
+                                    command=self.delete_cancel)
+        self.cancel_button.place(x=400, y=460)
+        # self.create_button.grid(columnspan=2)
+        self.create_button.place(x=500, y=460)
+        self.pack()
+        self.error_text = StringVar()
+        self.error_text.set("")
+        self.error_label = Label(self.master, textvariable=self.error_text, bg=page_color, font='veranda 15 bold')
+        self.error_label.place(x=400, y=500)
+        # self.place(x=330, y=330)
+
+    def delete_account(self):
+
+        email = self.entry_email.get()
+        password = self.entry_password.get()
+        confirm_pass = self.entry_pass_confirm.get()
+        if(not(password == confirm_pass)):
+            self.error_label.configure(bg='red')
+            self.error_text.set("Confirm Password does not match Password")
+            return
+        if (check_login(email, password)):
+            usersDatabase.delete_user_account(email)
+            self.master.destroy()
+            self.master = Tk()
+            self.master.title('Hope to see you back again soon!')
+            self.master.geometry('1000x1000')
+            self.master.configure(bg='DarkGoldenrod1')
+            app = LoginWindow(self.master)
+
+        else:
+            self.error_label.configure(bg='red')
+            self.error_text.set("Incorrect Email or Password")
+
+    def delete_cancel(self):
+        self.master.destroy()
+        self.master = Tk()
+        self.master.title('Welcome to the OneClick Community!')
+        self.master.geometry('1000x1000')
+        self.master.configure(bg='DarkGoldenrod1')
+        app = LoginWindow(self.master)
 
 
 class CreateAccount(Frame):

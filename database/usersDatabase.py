@@ -112,6 +112,27 @@ def delete_user_event(email,event_name):
         cursor.close()
         mysqldb.close()
 
+def delete_user_account(email):
+    try:
+        new_email = change_email(email)
+        mysqldb = connectToDatabase()
+        cursor = mysqldb.cursor()
+        statement = "DELETE FROM users WHERE email = '{}'".format(email)
+        cursor.execute(statement)
+        mysqldb.commit()
+        #print(cursor.rowcount(), "record deleted")
+
+        table_statement = "DROP TABLE IF EXISTS {}".format(new_email)
+        cursor.execute(table_statement)
+        mysqldb.commit()
+
+    except mysql.connector.Error as error:
+        print(error)
+
+    finally:
+        cursor.close()
+        mysqldb.close()
+
 
 '''def check_overlap(email,date,start_time,end_time):
     new_email = change_email(email)
