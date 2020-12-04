@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 import re
 from tkcalendar import Calendar
 from database import loginDatabase
@@ -109,12 +110,12 @@ class CreateAccount(Frame):
         self.entry_password = Entry(self.master, show='*')
         self.entry_pass_confirm = Entry(self.master, show='*')
 
-        #self.label_email.grid(row=0, sticky=E)
-        #self.label_password.grid(row=1, sticky=E)
-        #self.label_pass_confirm.grid(row=2, sticky=E)
-        #self.entry_email.grid(row=0, column=1)
-        #self.entry_password.grid(row=1, column=1)
-        #self.entry_pass_confirm.grid(row=2, column=1)
+        # self.label_email.grid(row=0, sticky=E)
+        # self.label_password.grid(row=1, sticky=E)
+        # self.label_pass_confirm.grid(row=2, sticky=E)
+        # self.entry_email.grid(row=0, column=1)
+        # self.entry_password.grid(row=1, column=1)
+        # self.entry_pass_confirm.grid(row=2, column=1)
         self.label_email.place(x=360, y=320)
         self.label_password.place(x=360, y=360)
         self.label_pass_confirm.place(x=360, y=400)
@@ -123,15 +124,15 @@ class CreateAccount(Frame):
         self.entry_password.place(x=480, y=370)
         self.entry_pass_confirm.place(x=580, y=410)
 
-
         self.create_button = Button(self.master, text='Create Account', bg=page_color, fg='brown', font='ComicSansMS',
                                     command=self.create_account)
-        self.cancel_button = Button(self.master, text='Cancel',bg=page_color, fg='brown', font='ComicSansMS', command=self.create_cancel)
+        self.cancel_button = Button(self.master, text='Cancel', bg=page_color, fg='brown', font='ComicSansMS',
+                                    command=self.create_cancel)
         self.cancel_button.place(x=400, y=460)
-        #self.create_button.grid(columnspan=2)
+        # self.create_button.grid(columnspan=2)
         self.create_button.place(x=500, y=460)
         self.pack()
-        #self.place(x=330, y=330)
+        # self.place(x=330, y=330)
 
     def create_cancel(self):
         self.master.destroy()
@@ -140,7 +141,7 @@ class CreateAccount(Frame):
         self.master.geometry('1000x1000')
         self.master.configure(bg='DarkGoldenrod1')
         app = LoginWindow(self.master)
-        
+
     def create_account(self):
         email = self.entry_email.get()
         password = self.entry_password.get()
@@ -197,9 +198,9 @@ class UpdateWindow(Frame):
             new_date = self.give_date(new_info).strftime("%Y-%m-%d")
             print('here')
             new_chosen = 'event_date'
-            #print('new date:' + new_date)
-            #print('old date:' + self.tup[3].strftime("%m %d %Y"))
-            #print(self.email + ', ' + self.event_name + ', ' + new_chosen)
+            # print('new date:' + new_date)
+            # print('old date:' + self.tup[3].strftime("%m %d %Y"))
+            # print(self.email + ', ' + self.event_name + ', ' + new_chosen)
             usersDatabase.update_user_string(self.email, self.event_name, new_chosen, self.tup[3], new_date)
         elif self.chosen == 'Start Time':
             new_time = self.give_time(new_info)
@@ -227,14 +228,26 @@ class MainWindow(Frame):
 
         self.frame = Frame(master, width=240, height=720, bg='DarkGoldenrod1')
         self.frame.pack(side=LEFT, fill=BOTH)
-        self.add_button = Button(self.frame, text='Make Appointment', font='verdana 16 bold',  fg='midnight blue', command=self.create_event)
+        self.add_button = Button(self.frame, text='Make Appointment', font='verdana 16 bold', fg='midnight blue',
+                                 command=self.create_event)
         self.event_frame = Frame(master, width=240, height=720, bg='DarkGoldenrod1')
-        self.scroll = Scrollbar(self.event_frame, bg='white')
-        self.scroll.pack(side=RIGHT, fill=Y)
-        self.variable = StringVar(self.event_frame)
-        self.my_events_label = Label(self.event_frame, text="My Events", bg='lightblue', font='verdana 16 bold', padx=1, pady=1)
-        # self.event_one_label = Label(self.event_frame, text="Event One", bg='lightpink', font='bold', padx=20, pady=20)
         self.event_frame.pack(side=RIGHT, fill=BOTH)
+        self.event_canvas = Canvas(self.event_frame, bg='DarkGoldenrod1')
+        self.event_canvas.pack(side=LEFT, fill=BOTH)
+        self.scroll = ttk.Scrollbar(self.event_frame, bg='DarkGoldenrod1', orient=VERTICAL,
+                                    command=self.event_canvas.yview)
+        self.scroll.pack(side=LEFT, fill=Y)
+        self.event_canvas.configure(yscrollcommand=self.scroll.set)
+        self.event_canvas.bind('<Configure>',
+                               lambda e: self.event_canvas.configure(scrollregion=self.event_canvas.bbox("all")))
+        self.inner_frame = Frame(self.event_canvas, bg='DarkGoldenrod1')
+        self.event_canvas.create_window((240, 240), window=self.inner_frame, anchor="ne")
+
+        self.variable = StringVar(self.event_frame)
+        self.my_events_label = Label(self.inner_frame, text="My Events", bg='lightblue', font='verdana 16 bold', padx=1,
+                                     pady=1)
+
+        # self.event_one_label = Label(self.event_frame, text="Event One", bg='lightpink', font='bold', padx=20, pady=20)
 
         def dynamic_delete(event_name):
             usersDatabase.delete_user_event(self.email, event_name)
@@ -262,8 +275,6 @@ class MainWindow(Frame):
             self.new_root.configure(bg='DarkGoldenrod1')
             UpdateWindow(self.new_root, email, event_name, tup, chosen)
 
-
-
         def refresh():
             event_dict = usersDatabase.get_user_events(self.email)
             #   for widget in self.event_frame.winfo_children():
@@ -285,6 +296,7 @@ class MainWindow(Frame):
                 # self.variable = StringVar(self.event_frame)
                 print(type(tup[3]))
                 print(str(tup[3]))
+
                 def is_completed():
                     stime_str = str(tup[3]).split(':')
                     etime_str = str(tup[4]).split(':')
@@ -294,10 +306,12 @@ class MainWindow(Frame):
 
                     print(str_date[2] + ', ' + today_str_date[2])
 
-                    if((int(str_date[1]) == int(today_str_date[1])) and (int(str_date[2]) == int(today_str_date[2])) and (int(str_date[0]) == int(today_str_date[0]))):
+                    if ((int(str_date[1]) == int(today_str_date[1])) and (
+                            int(str_date[2]) == int(today_str_date[2])) and (
+                            int(str_date[0]) == int(today_str_date[0]))):
                         if (int(etime_str[0]) < int(now_str[0])):
                             return 'brown'
-                        if((int(etime_str[1]) < int(now_str[1]) and (int(etime_str[0]) == int(now_str[0])))):
+                        if ((int(etime_str[1]) < int(now_str[1]) and (int(etime_str[0]) == int(now_str[0])))):
                             return 'brown'
                         if (int(stime_str[0]) < int(now_str[0])):
                             print('yes4')
@@ -309,54 +323,60 @@ class MainWindow(Frame):
                         else:
                             return 'red'
 
-                    elif(int(str_date[2]) < int(today_str_date[2])):
+                    elif (int(str_date[2]) < int(today_str_date[2])):
                         return 'brown'
-                    elif((int(str_date[2]) == int(today_str_date[2])) and (int(str_date[0]) < int(today_str_date[0]))):
+                    elif ((int(str_date[2]) == int(today_str_date[2])) and (int(str_date[0]) < int(today_str_date[0]))):
                         return 'brown'
-                    elif((int(str_date[2]) == int(today_str_date[2])) and (int(str_date[0]) == int(today_str_date[0])) and (int(str_date[1]) < int(today_str_date[1]))):
+                    elif ((int(str_date[2]) == int(today_str_date[2])) and (
+                            int(str_date[0]) == int(today_str_date[0])) and (
+                                  int(str_date[1]) < int(today_str_date[1]))):
                         return 'brown'
 
                     else:
-                        if(int(str_date[2]) > int(today_str_date[2])):
+                        if (int(str_date[2]) > int(today_str_date[2])):
                             return 'red'
-                        if(int(str_date[2]) < int(today_str_date[2])):
+                        if (int(str_date[2]) < int(today_str_date[2])):
                             print('yes1')
                             return 'green'
-                        elif((int(str_date[0]) < int(today_str_date[0])) and (int(str_date[2]) == int(today_str_date[2]))):
+                        elif ((int(str_date[0]) < int(today_str_date[0])) and (
+                                int(str_date[2]) == int(today_str_date[2]))):
                             print('yes2')
                             return 'green'
-                        elif((int(str_date[1]) < int(today_str_date[1])) and (int(str_date[2]) == int(today_str_date[2])) and (int(str_date[0]) == int(today_str_date[0]))):
+                        elif ((int(str_date[1]) < int(today_str_date[1])) and (
+                                int(str_date[2]) == int(today_str_date[2])) and (
+                                      int(str_date[0]) == int(today_str_date[0]))):
                             print('yes3')
                             return 'green'
                         else:
                             return 'red'
 
-
-                self.event = Label(self.event_frame, text=info, bg='lightpink', font='bold', padx=15, pady=20)
+                self.event = Label(self.inner_frame, text=info, bg='lightpink', font='bold', padx=15, pady=20)
 
                 if (is_completed() == 'green'):
-                    self.event = Label(self.event_frame, text=info, bg='green3', font='verdana 12', padx=15, pady=20)
+                    self.event = Label(self.inner_frame, text=info, bg='green3', font='verdana 12', padx=15, pady=20)
                 elif (is_completed() == 'brown'):
-                    self.event = Label(self.event_frame, text=info, bg='light pink', font='verdana 12', padx=15, pady=20)
+                    self.event = Label(self.inner_frame, text=info, bg='light pink', font='verdana 12', padx=15,
+                                       pady=20)
                 else:
-                    self.event = Label(self.event_frame, text=info, bg='MediumOrchid1', font='verdana 12', padx=15, pady=20)
+                    self.event = Label(self.inner_frame, text=info, bg='MediumOrchid1', font='verdana 12', padx=15,
+                                       pady=20)
 
                 self.event.pack()
                 self.variable.set(option_list[0])
                 self.variable.trace("w", self.option)
-                self.update_options = OptionMenu(self.event_frame, self.variable, *option_list)
+                self.update_options = OptionMenu(self.inner_frame, self.variable, *option_list)
                 self.update_options.pack()
-                self.update_button = Button(self.event_frame, text='Update', font='veranda 14 bold', fg='midnight blue',
+                self.update_button = Button(self.inner_frame, text='Update', font='veranda 14 bold', fg='midnight blue',
                                             command=lambda i=key: up_event_clicked(i, self.pass_tuple))
                 self.update_button.pack()
-                self.del_button = Button(self.event_frame, text='Delete', font='veranda 14 bold',  fg='midnight blue',
+                self.del_button = Button(self.inner_frame, text='Delete', font='veranda 14 bold', fg='midnight blue',
                                          command=lambda i=key: dynamic_delete(i))
                 self.del_button.pack()
 
-
         ref_func = refresh()
 
-        self.logout_button = Button(self.frame, text='Logout', font='verdana 16 bold',  fg='midnight blue', command=self.logout)
+        self.logout_button = Button(self.frame, text='Logout', font='verdana 16 bold', fg='midnight blue',
+                                    command=self.logout)
         self.add_button.pack()
         self.logout_button.pack()
 
@@ -377,14 +397,20 @@ class MainWindow(Frame):
         # TODO: use grid and create spacing between widgets in self.frame, also place submit button in the bottom-middle
 
         self.logout_button.destroy()
-        self.new_logout_button = Button(self.frame, text='Logout', font='verdana 14 bold',  fg='midnight blue', command=self.logout)
+        self.new_logout_button = Button(self.frame, text='Logout', font='verdana 14 bold', fg='midnight blue',
+                                        command=self.logout)
         self.add_button.pack_forget()
-        self.calendar = Calendar(self.frame, font='Arial 14', bg='midnight blue', fg='midnight blue', cursor='dotbox', selectmode='day',
+        self.calendar = Calendar(self.frame, font='Arial 14', bg='midnight blue', fg='midnight blue', cursor='dotbox',
+                                 selectmode='day',
                                  showothermonthdays=False, showweeknumbers=False, firstweekday='sunday')
-        self.label_event = Label(self.frame, text='Event Name', font='veranda 14 bold', bg='DarkGoldenrod1',  fg='midnight blue')
-        self.label_descr = Label(self.frame, text='Description', font='veranda 14 bold', bg='DarkGoldenrod1',  fg='midnight blue')
-        self.label_command = Label(self.frame, text='Application Selection', font='veranda 14 bold', bg='DarkGoldenrod1',  fg='midnight blue')
-        self.label_link = Label(self.frame, text='Zoom Link', font='veranda 14 bold', bg='DarkGoldenrod1',  fg='midnight blue')
+        self.label_event = Label(self.frame, text='Event Name', font='veranda 14 bold', bg='DarkGoldenrod1',
+                                 fg='midnight blue')
+        self.label_descr = Label(self.frame, text='Description', font='veranda 14 bold', bg='DarkGoldenrod1',
+                                 fg='midnight blue')
+        self.label_command = Label(self.frame, text='Application Selection', font='veranda 14 bold',
+                                   bg='DarkGoldenrod1', fg='midnight blue')
+        self.label_link = Label(self.frame, text='Zoom Link', font='veranda 14 bold', bg='DarkGoldenrod1',
+                                fg='midnight blue')
 
         self.entry_event = Entry(self.frame, width=64)
         self.entry_descr = Text(self.frame, width=48, height=5)
@@ -398,28 +424,34 @@ class MainWindow(Frame):
         self.label_link.pack(padx=20)
         self.entry_link.pack(padx=20)
 
-        self.start_label = Label(self.frame, text='Start Time: ', bg='DarkGoldenrod1', font='veranda 14 bold',  fg='midnight blue')
+        self.start_label = Label(self.frame, text='Start Time: ', bg='DarkGoldenrod1', font='veranda 14 bold',
+                                 fg='midnight blue')
         self.start_label.place(x=20, y=450)
         self.start_hourstr = StringVar(self.frame, '10')
-        self.start_hour = Spinbox(self.frame, font='veranda 14 bold',  fg='midnight blue',  from_=0, to=23, wrap=True, textvariable=self.start_hourstr, width=2,
+        self.start_hour = Spinbox(self.frame, font='veranda 14 bold', fg='midnight blue', from_=0, to=23, wrap=True,
+                                  textvariable=self.start_hourstr, width=2,
                                   state="readonly")
         self.start_minstr = StringVar(self.frame, '30')
         self.start_minstr.trace("w", self.trace_var)
         self.start_last_value = ""
-        self.start_min = Spinbox(self.frame, font='veranda 14 bold',  fg='midnight blue',  from_=0, to=59, wrap=True, textvariable=self.start_minstr, width=2,
+        self.start_min = Spinbox(self.frame, font='veranda 14 bold', fg='midnight blue', from_=0, to=59, wrap=True,
+                                 textvariable=self.start_minstr, width=2,
                                  state="readonly")
-        self.start_hour.place(x=133,y=450)
+        self.start_hour.place(x=133, y=450)
         self.start_min.place(x=173, y=450)
 
-        self.end_label = Label(self.frame, text='End Time: ', bg='DarkGoldenrod1', font='veranda 14 bold',  fg='midnight blue')
+        self.end_label = Label(self.frame, text='End Time: ', bg='DarkGoldenrod1', font='veranda 14 bold',
+                               fg='midnight blue')
         self.end_label.place(x=220, y=450)
         self.end_hourstr = StringVar(self.frame, '10')
-        self.end_hour = Spinbox(self.frame, font='veranda 14 bold',  fg='midnight blue', from_=0, to=23, wrap=True, textvariable=self.end_hourstr, width=2,
+        self.end_hour = Spinbox(self.frame, font='veranda 14 bold', fg='midnight blue', from_=0, to=23, wrap=True,
+                                textvariable=self.end_hourstr, width=2,
                                 state="readonly")
         self.end_minstr = StringVar(self.frame, '30')
         self.end_minstr.trace("w", self.trace_var)
         self.end_last_value = ""
-        self.end_min = Spinbox(self.frame, font='veranda 14 bold',  fg='midnight blue', from_=0, to=59, wrap=True, textvariable=self.end_minstr, width=2,
+        self.end_min = Spinbox(self.frame, font='veranda 14 bold', fg='midnight blue', from_=0, to=59, wrap=True,
+                               textvariable=self.end_minstr, width=2,
                                state="readonly")
         self.end_hour.place(x=326, y=450)
         self.end_min.place(x=366, y=450)
@@ -442,7 +474,7 @@ class MainWindow(Frame):
             )
             self.submit_event()
 
-        self.submit_btn = Button(self.frame, text='Submit', font ='veranda 14 bold',  fg='midnight blue', command=run)
+        self.submit_btn = Button(self.frame, text='Submit', font='veranda 14 bold', fg='midnight blue', command=run)
         self.submit_btn.place(x=175, y=490)
         self.new_logout_button.place(x=0, y=0)
 
