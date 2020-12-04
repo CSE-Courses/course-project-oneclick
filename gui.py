@@ -229,6 +229,8 @@ class MainWindow(Frame):
         self.frame.pack(side=LEFT, fill=BOTH)
         self.add_button = Button(self.frame, text='Make Appointment', font='verdana 16 bold',  fg='midnight blue', command=self.create_event)
         self.event_frame = Frame(master, width=240, height=720, bg='DarkGoldenrod1')
+        self.scroll = Scrollbar(self.event_frame, bg='white')
+        self.scroll.pack(side=RIGHT, fill=Y)
         self.variable = StringVar(self.event_frame)
         self.my_events_label = Label(self.event_frame, text="My Events", bg='lightblue', font='verdana 16 bold', padx=1, pady=1)
         # self.event_one_label = Label(self.event_frame, text="Event One", bg='lightpink', font='bold', padx=20, pady=20)
@@ -350,6 +352,7 @@ class MainWindow(Frame):
                 self.del_button = Button(self.event_frame, text='Delete', font='veranda 14 bold',  fg='midnight blue',
                                          command=lambda i=key: dynamic_delete(i))
                 self.del_button.pack()
+
 
         ref_func = refresh()
 
