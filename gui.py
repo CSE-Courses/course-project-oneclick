@@ -48,9 +48,13 @@ class LoginWindow(Frame):
         self.login_button.grid(columnspan=4)
         self.label_create_acct.grid(columnspan=4)
         self.label_delete_acct.grid(columnspan=4)
+        self.error_text = StringVar()
+        self.error_text.set("")
+        self.error_label = Label(self.master, textvariable=self.error_text, bg=page_color, font='veranda 15 bold')
+        self.error_label.place(x=390, y=500)
         loginDatabase.create_users_table()
 
-        self.pack()
+        #self.pack()
         self.place(x=330, y=330)
 
     def login_clicked(self):
@@ -64,6 +68,10 @@ class LoginWindow(Frame):
             self.master.geometry('1280x720')
             self.master.configure(bg='midnight blue')
             app = MainWindow(self.master, email)
+        else:
+            self.error_label.configure(bg='red')
+            self.error_text.set("Incorrect Email or Password")
+
         print(email)
         print(password)
 
