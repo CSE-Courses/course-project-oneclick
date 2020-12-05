@@ -327,7 +327,7 @@ class MainWindow(Frame):
         self.event_canvas.bind('<Configure>',
                                lambda e: self.event_canvas.configure(scrollregion=self.event_canvas.bbox("all")))
         self.inner_frame = Frame(self.event_canvas, bg='DarkGoldenrod1')
-        self.event_canvas.create_window((240, 240), window=self.inner_frame, anchor="ne")
+        self.event_canvas.create_window((0, 0), window=self.inner_frame, anchor="ne")
 
         self.variable = StringVar(self.event_frame)
         self.my_events_label = Label(self.inner_frame, text="My Events", bg='lightblue', font='verdana 16 bold', padx=1,
