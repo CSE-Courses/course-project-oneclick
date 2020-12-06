@@ -603,9 +603,9 @@ class MainWindow(Frame):
         self.error_text = StringVar()
         self.error_text.set("")
         self.error_label = Label(self.master, textvariable=self.error_text, bg='DarkGoldenrod1', font='veranda 15 bold')
-        self.submit_btn.place(x=175, y=490)
+        self.submit_btn.place(x=230, y=490)
         self.new_logout_button.place(x=0, y=0)
-        self.error_label.place(x=125, y=530)
+        self.error_label.place(x=80, y=530)
 
     def trace_var(self, *args):
         if self.start_last_value == "59" and self.start_minstr.get() == "0":
