@@ -575,6 +575,9 @@ class MainWindow(Frame):
                         return str(key)
                     elif((st_time >= est_time) and (eend_time >= est_time) and (eend_time <= end_time)):
                         return str(key)
+                    elif((st_time <= est_time) and (est_time <= end_time)):
+                        return str(key)
+                    
 
             return None
 
