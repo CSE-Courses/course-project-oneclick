@@ -547,6 +547,38 @@ class MainWindow(Frame):
             minute = min_str(minute)
             return self.calendar.get_date() + f"/{hour}" + f"/{minute}"
 
+        def check_conflict():
+            event_dict = usersDatabase.get_user_events(self.email)
+            #   for widget in self.event_frame.winfo_children():
+            #      widget.destroy()
+            self.my_events_label.pack()
+            # self.event_one_label.pack()
+
+            for key in event_dict:
+                tup = event_dict[key]
+                size = len(tup)
+                dat = tup[2].strftime('%m %d %Y')
+                print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+                print(type(tup[2]))
+                print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+                if(tup[2] == self.give_date(self.calendar.get_date())):
+                    st_time = time(int(self.start_hourstr.get()), int(self.start_minstr.get()))
+                    end_time = time(int(self.end_hourstr.get()), int(self.end_minstr.get()))
+                    est_time = (datetime.datetime.min + tup[3]).time()
+                    eend_time = (datetime.datetime.min + tup[4]).time()
+                    print(est_time)
+                    print(st_time)
+                    print(end_time)
+                    if((st_time >= est_time) and (st_time <= eend_time)):
+                        return str(key)
+                    elif((end_time>=est_time) and (eend_time <= end_time)):
+                        return str(key)
+                    elif((st_time >= est_time) and (eend_time >= est_time) and (eend_time <= end_time)):
+                        return str(key)
+
+            return None
+
+
         def run():
             eventscheduler.run_popup(
                 time_date_str(
@@ -558,11 +590,22 @@ class MainWindow(Frame):
                 self.entry_descr.get("1.0", "end-1c"),
                 self.entry_link.get()
             )
-            self.submit_event()
+            ret_val = check_conflict()
+            if(not(ret_val == None)):
+                print('Yes there is a conflict -- returning now!')
+                self.error_text.set('Unable to create event, conflict with:{}'.format(ret_val))
+                self.error_label.configure(bg='red')
+                return
+            else:
+                self.submit_event()
 
         self.submit_btn = Button(self.frame, text='Submit', font='veranda 14 bold', fg='midnight blue', command=run)
+        self.error_text = StringVar()
+        self.error_text.set("")
+        self.error_label = Label(self.master, textvariable=self.error_text, bg='DarkGoldenrod1', font='veranda 15 bold')
         self.submit_btn.place(x=175, y=490)
         self.new_logout_button.place(x=0, y=0)
+        self.error_label.place(x=125, y=530)
 
     def trace_var(self, *args):
         if self.start_last_value == "59" and self.start_minstr.get() == "0":
