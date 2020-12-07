@@ -320,7 +320,7 @@ class MainWindow(Frame):
         self.event_frame.pack(side=RIGHT, fill=BOTH)
         self.event_canvas = Canvas(self.event_frame, bg='DarkGoldenrod1')
         self.event_canvas.pack(side=LEFT, fill=BOTH)
-        self.scroll = ttk.Scrollbar(self.event_frame, bg='DarkGoldenrod1', orient=VERTICAL,
+        self.scroll = Scrollbar(self.event_frame, bg='DarkGoldenrod1', orient=VERTICAL,
                                     command=self.event_canvas.yview)
         self.scroll.pack(side=LEFT, fill=Y)
         self.event_canvas.configure(yscrollcommand=self.scroll.set)
