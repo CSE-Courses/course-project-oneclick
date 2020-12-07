@@ -467,7 +467,7 @@ class MainWindow(Frame):
                 self.update_options = OptionMenu(self.inner_frame, self.variable, *option_list)
                 self.update_options.pack()
                 self.update_button = Button(self.inner_frame, text='Update', font='veranda 14 bold', fg='midnight blue',
-                                            command=lambda i=key: up_event_clicked(i, self.pass_tuple))
+                                            command=lambda i=key, j=self.pass_tuple: up_event_clicked(i, j))
                 self.update_button.pack()
                 self.del_button = Button(self.inner_frame, text='Delete', font='veranda 14 bold', fg='midnight blue',
                                          command=lambda i=key: dynamic_delete(i))
