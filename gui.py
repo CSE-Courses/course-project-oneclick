@@ -586,13 +586,17 @@ class MainWindow(Frame):
                     print(est_time)
                     print(st_time)
                     print(end_time)
-                    if((st_time >= est_time) and (st_time <= eend_time)):
+                    if ((st_time >= est_time) and (st_time <= eend_time)):
+                        print('here1')
                         return str(key)
-                    elif((end_time>=est_time) and (eend_time <= end_time)):
+                    elif ((end_time >= est_time) and (end_time <= eend_time)):
+                        print('here2')
                         return str(key)
-                    elif((st_time >= est_time) and (eend_time >= est_time) and (eend_time <= end_time)):
+                    elif ((st_time >= est_time) and (end_time <= eend_time)):
+                        print('here3')
                         return str(key)
-                    elif((st_time <= est_time) and (est_time <= end_time)):
+                    elif ((st_time <= est_time) and (est_time <= end_time)):
+                        print('here4')
                         return str(key)
                     
 
