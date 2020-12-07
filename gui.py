@@ -86,7 +86,7 @@ class LoginWindow(Frame):
         self.master = Tk()
         self.master.title('OneClick')
         self.master.geometry('1280x720')
-        self.master.configure(bg='cornflowerblue')
+        self.master.configure(bg='midnight blue')
         app = MainWindow(self.master, email)
 
     def create_clicked(self):
