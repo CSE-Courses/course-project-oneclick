@@ -83,8 +83,16 @@ def drop_user_table(email):
     mysql.close()
 
 
-def update_user_table(email,event_name_bool,zoom_link_bool,decription_bool,date_bool,start_time_bool,end_time_bool,update):
-   pass
+def update_user_string(email,event_name,attribute,old_string,new_string):
+    new_email = change_email(email)
+    mysqldb = connectToDatabase()
+    cursor = mysqldb.cursor()
+    statement = "UPDATE {} SET {} = '{}' WHERE {} = '{}'".format(new_email, attribute, new_string, attribute, old_string)
+    print(statement)
+    cursor.execute(statement)
+    mysqldb.commit()
+    print(cursor.rowcount, "record(s) affected")
+    mysqldb.close()
 
 def delete_user_event(email,event_name):
 
@@ -96,6 +104,27 @@ def delete_user_event(email,event_name):
         cursor.execute(statement)
         mysqldb.commit()
         #print(cursor.rowcount(), "record deleted")
+
+    except mysql.connector.Error as error:
+        print(error)
+
+    finally:
+        cursor.close()
+        mysqldb.close()
+
+def delete_user_account(email):
+    try:
+        new_email = change_email(email)
+        mysqldb = connectToDatabase()
+        cursor = mysqldb.cursor()
+        statement = "DELETE FROM users WHERE email = '{}'".format(email)
+        cursor.execute(statement)
+        mysqldb.commit()
+        #print(cursor.rowcount(), "record deleted")
+
+        table_statement = "DROP TABLE IF EXISTS {}".format(new_email)
+        cursor.execute(table_statement)
+        mysqldb.commit()
 
     except mysql.connector.Error as error:
         print(error)
