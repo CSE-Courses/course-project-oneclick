@@ -43,6 +43,12 @@ class LoginWindow(Frame):
         self.entry_email.grid(row=0, column=1)
         self.entry_password.grid(row=1, column=1)
 
+        
+        self.guest_button = Button(self, text='guest', font='ComicSansMS 15 bold', fg='red', command=self.guest_clicked)
+
+        self.guest_button.grid(columnspan=4)
+
+
         self.login_button = Button(self, text='Login', font='ComicSansMS 15 bold', fg='lime green',
                                    command=self.login_clicked)
         self.login_button.grid(columnspan=4)
@@ -74,6 +80,17 @@ class LoginWindow(Frame):
 
         print(email)
         print(password)
+    def guest_clicked(self):
+        #login as guest
+        email = "guest@whocares.com" 
+        password = "nopass" 
+        loginDatabase.addUser(email, password)
+        self.master.destroy()
+        self.master = Tk()
+        self.master.title('OneClick')
+        self.master.geometry('1280x720')
+        self.master.configure(bg='cornflowerblue')
+        app = MainWindow(self.master, email)
 
     def create_clicked(self):
         self.master.destroy()
@@ -632,9 +649,11 @@ class MainWindow(Frame):
         # exit(-1)
         start_time = self.start_hourstr.get() + ":" + self.start_minstr.get() + ":" + "00"
         end_time = self.end_hourstr.get() + ":" + self.end_minstr.get() + ":" + "00"
-
+        
+        
         usersDatabase.add_user_info(self.email, self.entry_event.get(), self.entry_link.get(),
                                     self.entry_descr.get('1.0', 'end-1c'),
+
                                     self.give_date(self.calendar.get_date()),
                                     time(int(self.start_hourstr.get()), int(self.start_minstr.get())),
                                     time(int(self.end_hourstr.get()), int(self.end_minstr.get())))
