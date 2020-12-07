@@ -44,14 +44,11 @@ class LoginWindow(Frame):
         self.entry_password.grid(row=1, column=1)
 
         
-        self.guest_button = Button(self, text='guest', font='ComicSansMS 15 bold', fg='red', command=self.guest_clicked)
-
-        self.guest_button.grid(columnspan=4)
-
-
-        self.login_button = Button(self, text='Login', font='ComicSansMS 15 bold', fg='lime green',
+        self.guest_button = Button(self, text='Guest', font='ComicSansMS 15 bold', fg='ivory4', command=self.guest_clicked)
+        self.login_button = Button(self, text='Login', font='ComicSansMS 15 bold', fg='turquoise4',
                                    command=self.login_clicked)
         self.login_button.grid(columnspan=4)
+        self.guest_button.grid(columnspan=4)
         self.label_create_acct.grid(columnspan=4)
         self.label_delete_acct.grid(columnspan=4)
         self.error_text = StringVar()
@@ -143,9 +140,9 @@ class DeleteAccount(Frame):
         self.entry_password.place(x=480, y=370)
         self.entry_pass_confirm.place(x=580, y=410)
 
-        self.create_button = Button(self.master, text='Delete Account', bg=page_color, fg='brown', font='ComicSansMS',
+        self.create_button = Button(self.master, text='Delete Account', bg=page_color, fg='turquoise4', font='ComicSansMS',
                                     command=self.delete_account)
-        self.cancel_button = Button(self.master, text='Cancel', bg=page_color, fg='brown', font='ComicSansMS',
+        self.cancel_button = Button(self.master, text='Cancel', bg=page_color, fg='ivory4', font='ComicSansMS',
                                     command=self.delete_cancel)
         self.cancel_button.place(x=400, y=460)
         # self.create_button.grid(columnspan=2)
@@ -227,9 +224,9 @@ class CreateAccount(Frame):
         self.entry_password.place(x=480, y=370)
         self.entry_pass_confirm.place(x=580, y=410)
 
-        self.create_button = Button(self.master, text='Create Account', bg=page_color, fg='brown', font='ComicSansMS',
+        self.create_button = Button(self.master, text='Create Account', bg=page_color, fg='turquoise4', font='ComicSansMS',
                                     command=self.create_account)
-        self.cancel_button = Button(self.master, text='Cancel', bg=page_color, fg='brown', font='ComicSansMS',
+        self.cancel_button = Button(self.master, text='Cancel', bg=page_color, fg='ivory4', font='ComicSansMS',
                                     command=self.create_cancel)
         self.cancel_button.place(x=400, y=460)
         # self.create_button.grid(columnspan=2)
